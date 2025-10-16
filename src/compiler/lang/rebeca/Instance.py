@@ -1,0 +1,36 @@
+#!/usr/bin/python
+# Filename: Instance.py
+# Description: Implementation of the Instance class
+
+from compiler.lang.rebeca.RuntimeContext import RuntimeContext as RebecaRuntimeContext
+from compiler.lang.program.Instruction import Instruction
+from compiler.lang.program.RuntimeContext import RuntimeContext
+
+# Subclass representing an instance declaration
+class Instance(Instruction):
+	def __init__(self, type, name, identifiers, params, callback=None):
+		Instruction.__init__(self)
+		self.type		= type
+		self.name		= name
+		self.idents		= identifiers
+		self.params		= params
+		self.callback	= callback
+		return
+
+	def execute(self, ctxt:RuntimeContext):
+		# ctxt.trace(f'Creating instance: {self.name} of type {self.type}')
+		rctxt:RebecaRuntimeContext	= ctxt
+		rc							= rctxt.module.get(self.type)
+		if rc is None:
+			raise RuntimeError(f'Reactive class [{self.type}] not found to create instance [{self.name}].')
+
+		rctxt.instances[self.name]	= ctxt.create_actor( rc, self.name, self.idents, self.params )
+		return None
+
+	def __str__(self):
+		arglist	= Instruction.argstostring(self.params)
+		return f'{self.type} {self.name}({','.join(self.idents)}):({','.join(arglist)})'
+
+if __name__ == "__main__":
+	test = Instance()
+

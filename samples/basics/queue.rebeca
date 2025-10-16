@@ -1,0 +1,21 @@
+reactiveclass Queue(5) {       
+	statevars { 
+		queue	waiting;		// FEATURE: Use containers - list, map, queue, stack
+		
+	} 
+  
+	Queue() { 
+        for( i=0; i<12; i++){
+    		waiting.push(10);
+			
+        }
+		
+		cnt = waiting.count()
+			
+		trace( waiting.count() );
+	}   
+} 
+
+main { 
+	Queue q():(); 
+} 

@@ -1,0 +1,24 @@
+  
+reactiveclass Medium(5) { 
+	knownrebecs { 
+		Receiver receiver; 
+		Sender from;    
+	} 
+      
+	statevars { 
+		boolean passMessage; 
+		queue	waiting;		// FEATURE: Use containers - list, map, queue, stack
+		int msgcount;
+	} 
+  
+	Medium() { 
+		passMessage=true; 
+	} 
+  
+	msgsrv pass(boolean msgBit) {
+		int count;
+		waiting.push(10);
+		msgcount = waiting.count();
+		receiver.receiveMsg( msgBit); 
+	} 
+} 

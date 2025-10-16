@@ -1,0 +1,18 @@
+reactiveclass Receiver(5) { 
+	knownrebecs { 
+		Medium medium; 
+		Sender from;    
+	} 
+      
+	statevars { 
+		boolean messageBit; 
+	} 
+  
+	msgsrv initial() { 
+	} 
+  
+	msgsrv receiveMsg(boolean msgBit) { 
+		messageBit =msgBit; 
+		//from.receive(true); 
+	} 
+} 

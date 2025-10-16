@@ -1,0 +1,47 @@
+reactiveclass Sender(5) { 
+	knownrebecs { 
+		Medium medium; 
+		Receiver rec;     
+	} 
+      
+	statevars { 
+		boolean receivedBit; 
+		boolean sendBit; 
+		boolean hasSucceeded; 
+		
+		port	topic;			// FEATURE: Use ports to signal the external world
+	} 
+  
+	Sender() { 
+		// FEATURE: Use traces to support debugging
+		trace('Sender::ctor');
+
+		topic.open( 'ipc/Objects/Vessels/XXXBB' );
+		
+		sendBit = false; 
+		hasSucceeded = false;
+		medium.pass(sendBit); 
+		self.sendMsg(); 
+	} 
+
+	~Sender(){
+		trace('Sender::dtor');
+	}
+
+	msgsrv sendMsg() { 
+		trace('Sender::sendMsg');
+		//receive(hasSucceeded) 
+		if (hasSucceeded == true) { 
+			if (sendBit == true) { 
+				sendBit = false; 
+			} else { 
+				sendBit = true; 
+			} 
+		} 
+        
+		topic.send( 'Msg' );
+		
+		medium.pass(sendBit); 
+		self.sendMsg(); 
+	} 
+} 

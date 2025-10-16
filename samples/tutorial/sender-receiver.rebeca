@@ -1,0 +1,9 @@
+import lib.sender
+import lib.receiver
+import lib.medium
+  
+main { 
+	Sender from (medium, receiver):(); 
+	Medium medium(receiver, from):(); 
+	Receiver receiver(medium, from):(); 
+} 

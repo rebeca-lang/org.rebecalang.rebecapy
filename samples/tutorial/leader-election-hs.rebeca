@@ -1,0 +1,101 @@
+reactiveclass Node(8) { 
+    knownrebecs { 
+	    Node nodeL; 
+        Node nodeR; 
+    } 
+      
+    statevars { 
+        boolean monitor; 
+        int myId; 
+        int phase; 
+        int monitorId; 
+        boolean receivedLeft; 
+        boolean receivedRight; 
+    } 
+  
+    msgsrv initial(int id) { 
+        myId = id; 
+	    monitor = false; 
+        monitorId = id; 
+        phase = 1; 
+        receivedLeft = false; 
+        receivedRight = false; 
+        self.arrive(); 
+    } 
+  
+    msgsrv arrive() { 
+        nodeL.receive(myId, true, phase); 
+        nodeR.receive(myId, true, phase); 
+	} 
+  
+	msgsrv receive(int msgId, boolean inOut, int hopCount) { 
+		if ((sender==nodeL) &&  (inOut)) {
+			if (((msgId <monitorId)||(msgId==monitorId)) && (hopCount >1)) { 
+				monitorId = msgId; 
+        	    nodeR.receive (msgId, true, hopCount-1); 
+            } else { 
+				if (((msgId <monitorId)||(msgId==monitorId)) && (hopCount ==1)){ 
+					monitorId=msgId; 
+                    nodeL.receive (msgId, false,1); 
+                } else { 
+                    if (msgId == myId) { 
+                    	monitor = true; 
+                    	monitorId = myId; 
+                	} 
+                } 
+			} 
+        } 
+            
+        if ((sender==nodeR) && (inOut)) { 
+			if (((msgId <monitorId)||(msgId==monitorId)) && (hopCount >1)){ 
+            	monitorId=msgId; 
+                nodeL.receive (msgId, true, hopCount-1); 
+            } else { 
+				if (((msgId <monitorId)||(msgId==monitorId)) && (hopCount ==1)){  
+                	monitorId=msgId; 
+					nodeR.receive (msgId, false,1); 
+                } else { 
+                	if (msgId == myId) { 
+                    	monitor = true; 
+                        monitorId = myId; 
+                    } 
+                } 
+        	} 
+        } 
+            
+        if ((sender==nodeL) && !(inOut) && !(msgId==myId)) { 
+        	nodeR.receive(msgId, false, 1);           
+        } 
+            
+        if ((sender==nodeR) &&  !(inOut) && !(msgId==myId)) { 
+        	nodeL.receive(msgId, false, 1);           
+        } 
+            
+		if ((sender==nodeL) && (msgId == myId) && !(inOut) && (hopCount==1)) { 
+        	receivedLeft = true; 
+        } 
+		if ((sender==nodeR) && (msgId == myId) && !(inOut) && (hopCount==1)) { 
+        	receivedRight = true; 
+        }     
+            
+        if (receivedLeft && receivedRight&& (phase<3)){ 
+        	if(phase==2) { 
+            	monitor=true; 
+            } else { 
+                phase = phase * 2; 
+                receivedLeft=false; 
+                receivedRight=false; 
+                nodeL.receive(myId, true, phase); 
+                nodeR.receive(myId, true, phase); 
+            } 
+        } 
+	} 
+} 
+  
+  
+main { 
+      Node node1(node4,node2):(1); 
+      Node node2(node1,node3):(2); 
+      Node node3(node2,node4):(3); 
+      Node node4(node3,node1):(4); 
+} 

@@ -1,0 +1,79 @@
+reactiveclass Customer(3) {
+  knownrebecs { OrderService orderService; }
+  statevars {
+    int id;
+    boolean buying;
+  }
+  Customer(int myId) {
+    id = myId;
+    self.browse();
+  }
+  msgsrv browse() {
+    buying = ?(true, false);
+    if(buying)
+      orderService.placeOrder(self, ?(0, 1), ?(1, 2));
+    else
+      self.browse();
+  }
+  msgsrv delivered(boolean success) {
+    buying = false;
+    self.browse();
+  }
+}
+
+reactiveclass OrderService (4) {
+  knownrebecs { 
+    InventoryService inventory;
+    ShippingService shipping;
+  }
+  msgsrv placeOrder(Customer cu, byte product, byte qty) {
+    inventory.checkAvailability(cu, product, qty);
+  }
+  msgsrv availabilityStatus(Customer cu, boolean available, byte product, byte qty) {
+    if(available) {
+      inventory.confirmBoughtItem(cu, product, qty);
+    } else {
+      cu.delivered(false);
+    }
+  }
+  
+  msgsrv confirm(Customer cu, byte product, byte qty) {
+    shipping.arrangeDelivery(cu, product, qty);
+  }
+  msgsrv shippingIsScheduled(Customer cu) {
+    cu.delivered(true);
+  }
+  
+}
+
+reactiveclass InventoryService (4) {
+  statevars { int[2] stockLevel; } 
+  InventoryService() {
+    for (int i = 0; i < 2; i++) {
+      stockLevel[i] = 5;
+    }
+  }
+  msgsrv checkAvailability(Customer cu, byte product, byte qty) {
+    ((OrderService)sender).availabilityStatus(cu, stockLevel[product] >= qty, product, qty);
+  }
+  
+  msgsrv confirmBoughtItem(Customer cu, byte product, byte qty) {
+    stockLevel[product] -= qty;
+    ((OrderService)sender).confirm(cu, product, qty);
+  }
+}
+
+reactiveclass ShippingService (3){
+  msgsrv arrangeDelivery(Customer customer, byte product, byte quantity) {
+    ((OrderService)sender).shippingIsScheduled(customer);
+  }
+}
+
+main {
+  Customer customer1(orderService):(1);
+  Customer customer2(orderService):(2);
+  Customer customer3(orderService):(3);
+  OrderService orderService(inventoryService, shippingService):();
+  InventoryService inventoryService():();
+  ShippingService shippingService():();
+}

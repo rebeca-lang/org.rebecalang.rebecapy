@@ -1,0 +1,108 @@
+#!/usr/bin/python
+# Filename: RuntimeContext.py
+# Description: Implementation of the RuntimeContext class
+
+from compiler.lang.program.RuntimeContext import RuntimeContext as RuntimeContextBase
+
+class RuntimeContext(RuntimeContextBase):
+	def __init__(self, module, factory):
+		RuntimeContextBase.__init__(self)
+
+		# Server module
+		self.module		= module
+
+		# List of server instances
+		self.instances	= {}		# List of instantiated instances
+		self.bound		= False		# Chek if the instances are initialized
+		self.factory	= factory
+		return
+
+	@property
+	def stacklen(self):
+		return len(self.stack)
+
+	def fork(self):
+		newctxt 			= self.clone()
+
+		while len(newctxt.stack) != 1:
+			newctxt.stack.pop(0)
+
+		return newctxt
+
+	def clone(self):
+		newctxt 			= RuntimeContext(self.module, self.factory)
+
+		# Clone base context
+		RuntimeContextBase.copy(self, newctxt)
+
+		# Clone propertes
+		newctxt.module 		= self.module
+		newctxt.instances	= self.instances.copy()
+		return newctxt
+	
+	def create(self, module):
+		if module.main:
+			module.main.create(self)
+			
+		# bind all instancees
+		self.bind()
+		return
+
+	def destroy(self):
+		for i in self.instances.values():
+			i.destroy(self)
+		self.instances.clear()
+		return
+
+	@property
+	def runnable(self):
+		for i in self.instances.values():
+			if i.runnable == False:
+				return False
+		return True
+
+	def bind(self):
+		# Bind known rebecs from the global context. All instances 
+		# must be created first before they can be run. This is 
+		# done only once.
+		if self.bound == False:
+			for inst in self.instances.values():
+				inst.construct(self)
+			self.bound = True
+		return
+	
+	def step(self):
+		if self.bound == False:
+			self.bind()
+
+		# Step all runnable instances
+		for i in self.instances.values():
+			if i.runnable == False:
+				continue
+
+			i.step(self)
+		return
+
+	def get(self, name):
+		# Check in the current instance first
+		thisptr = self.ip.thisptr
+		if thisptr is not None:
+			value = thisptr.kr.get( name, None)
+			if value is not None:
+				return value
+
+		value = self.instances.get( name, None)
+		if value is not None:
+			return value
+
+		return RuntimeContextBase.get(self, name)
+
+	def create_actor(self, rc, name:str, idents:list=None, params:list=None):
+		return self.factory.create_actor( self, rc, name, idents, params )
+
+	def create_object(self, type:str):			
+		return self.factory.create_object(self, type)
+
+if __name__ == "__main__":
+	test = RuntimeContext()
+
