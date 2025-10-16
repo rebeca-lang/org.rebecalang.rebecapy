@@ -1,0 +1,9 @@
+reactiveclass HelloWorld(5) {         
+	HelloWorld() { 
+        trace('Hello world.');
+	}   
+} 
+
+main { 
+	HelloWorld app():(); 
+} 
