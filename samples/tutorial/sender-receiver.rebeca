@@ -1,6 +1,6 @@
-import lib.sender
-import lib.receiver
-import lib.medium
+import lib.Sender
+import lib.Receiver
+import lib.Medium
   
 main { 
 	Sender from (medium, receiver):(); 

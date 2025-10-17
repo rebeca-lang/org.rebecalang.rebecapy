@@ -1,0 +1,22 @@
+reactiveclass Consumer(2) {
+	knownrebecs {
+		BufferManager buffer;		
+	}
+
+	statevars {
+	}
+
+	msgsrv initial() {
+		self.beginConsume();
+	}
+
+	msgsrv consume(int bufNum) {
+		buffer.ackConsume();
+		self.beginConsume();	
+	}
+	
+	msgsrv beginConsume() {
+		buffer.giveMeNextConsume();
+	}
+
+}

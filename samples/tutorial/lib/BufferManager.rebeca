@@ -1,0 +1,68 @@
+reactiveclass BufferManager(4) {
+	knownrebecs {
+		Producer producer;
+		Consumer consumer;
+	}
+
+	statevars {
+		boolean empty;
+		boolean full;
+		boolean producerWaiting;
+		boolean consumerWaiting;
+		int bufferlenght;
+		int nextProduce;
+		int nextConsume;		
+	}
+
+	msgsrv initial() {
+		bufferlenght = 2;
+		empty = true;
+		full = false;
+		producerWaiting = false;
+		consumerWaiting = false;
+		nextProduce = 0;
+		nextConsume = 0;
+	}
+
+	msgsrv giveMeNextProduce() {
+		if (!full)	{
+			producer.produce(nextProduce);
+		} 
+	}
+
+	msgsrv giveMeNextConsume() {
+		if (!empty) {
+			consumer.consume(nextConsume);
+		} 
+     	else {
+			consumerWaiting = true;
+		}
+	}
+
+	msgsrv ackProduce() {
+		nextProduce = (nextProduce + 1) %
+                    bufferlenght;
+		if (nextProduce == nextConsume) {
+			full = true;
+		}
+		empty = false;
+		if (consumerWaiting) {
+			consumer.consume(nextConsume);
+			consumerWaiting = false;
+		}
+	}
+
+	msgsrv ackConsume() {
+		nextConsume = (nextConsume + 1) %
+                    bufferlenght;
+		if (nextConsume == nextProduce) {
+			empty = true;
+		}
+		full = false;
+		if (producerWaiting) {
+			producer.produce(nextProduce);
+			producerWaiting = false;
+		}
+	}
+}
+

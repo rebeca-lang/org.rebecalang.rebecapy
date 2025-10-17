@@ -1,0 +1,22 @@
+
+reactiveclass Producer(2) {
+	knownrebecs {
+		BufferManager buffer;
+	}
+
+	statevars {
+	}
+
+	msgsrv initial() {
+		self.beginProduce();
+	}
+	
+	msgsrv produce(int bufNum) {
+		buffer.ackProduce();
+		self.beginProduce();
+	}
+
+	msgsrv beginProduce() {
+		buffer.giveMeNextProduce();
+	}
+}

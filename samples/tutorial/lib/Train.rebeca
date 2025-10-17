@@ -1,0 +1,30 @@
+
+reactiveclass Train(3) {
+	knownrebecs {
+		BridgeController controller;
+	}
+
+	statevars {
+		boolean onTheBridge;
+	}
+
+	Train() {
+		onTheBridge = false;
+		self.Passed();
+	}
+
+	msgsrv YouMayPass() {
+		onTheBridge = true;
+		self.Passed();
+	}
+	
+	msgsrv Passed() {
+		onTheBridge = false;
+		controller.Leave();
+		self.ReachBridge();
+	}
+
+	msgsrv ReachBridge() {
+		controller.Arrive();
+	}
+}
