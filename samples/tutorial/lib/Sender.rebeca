@@ -7,16 +7,11 @@ reactiveclass Sender(5) {
 	statevars { 
 		boolean receivedBit; 
 		boolean sendBit; 
-		boolean hasSucceeded; 
-		
-		port	topic;			// FEATURE: Use ports to signal the external world
+		boolean hasSucceeded; 		
 	} 
   
 	Sender() { 
-		// FEATURE: Use traces to support debugging
 		trace('Sender::ctor');
-
-		topic.open( 'ipc/Objects/Vessels/XXXBB' );
 		
 		sendBit = false; 
 		hasSucceeded = false;
@@ -30,6 +25,7 @@ reactiveclass Sender(5) {
 
 	msgsrv sendMsg() { 
 		trace('Sender::sendMsg');
+
 		//receive(hasSucceeded) 
 		if (hasSucceeded == true) { 
 			if (sendBit == true) { 
@@ -38,9 +34,7 @@ reactiveclass Sender(5) {
 				sendBit = true; 
 			} 
 		} 
-        
-		topic.send( 'Msg' );
-		
+        		
 		medium.pass(sendBit); 
 		self.sendMsg(); 
 	} 

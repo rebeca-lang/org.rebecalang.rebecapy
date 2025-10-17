@@ -8,44 +8,45 @@ from abc import ABC, abstractmethod
 
 class Interface(ABC):
 	@abstractmethod
-	def send(self, msg, options=None):
+	def send(self, fd, msg, options=None):
 		pass
 
 	@abstractmethod
-	def receive(self, options=None):
+	def receive(self, fd, options=None):
 		pass
 
 	@abstractmethod
-	def is_pending(self):
+	def is_pending(self, fd):
 		return False
 
 	@abstractmethod
-	def is_open(self):
+	def is_open(self, fd):
 		return False
 
 	@abstractmethod
-	def setopt(self, option, value):
+	def setopt(self, fd, option, value):
 		return False
 
 	@abstractmethod
-	def getopt(self, option):
+	def getopt(self, fd, option):
 		return False
 	
 	@abstractmethod
-	def connect(self, address:str):
+	def connect(self, fd, address:str):
 		return False
 
 	@abstractmethod
-	def open(self, type:str):
+	def open(self, fd, type:str):
 		return False
 
 	@abstractmethod
-	def close(self):
+	def close(self, fd):
 		return False
 
 class Port(RuntimeObject):
-	def __init__(self):
-		self.ifc 		= None
+	def __init__(self, ifc=None):
+		self.ifc 	= ifc
+		self.fd 	= None
 		return
 
 	@staticmethod
@@ -73,34 +74,34 @@ class Port(RuntimeObject):
 		return self.interface is not None
 	
 	def open(self, type:str):
-		self.interface.open(type)
+		self.fd = self.interface.open(type)
 		return self
 
 	def close(self):
-		self.interface.close()
+		self.interface.close(self.fd)
 		self.ifc = None
 		return self
 
 	def connect(self, address:str):
-		self.interface.connect(address)
+		self.interface.connect(self.fd, address)
 		return self
 	
 	def send(self, msg, options=None):
-		self.interface.send(msg, options)
+		self.interface.send(self.fd, msg, options)
 		return self
 	
 	def receive(self, options=None):
-		return self.interface.receive(options)
+		return self.interface.receive(self.fd, options)
 
 	def is_pending(self):
-		return self.interface.is_pending()
-	
+		return self.interface.is_pending(self.fd)
+
 	def setopt(self, option, value):
-		return self.interface.setopt(option, value)
-	
+		return self.interface.setopt(self.fd, option, value)
+
 	def getopt(self, option):
-		return self.interface.getopt(option)
-	
+		return self.interface.getopt(self.fd, option)
+
 	@property
 	def interface(self):
 		if self.ifc is None:

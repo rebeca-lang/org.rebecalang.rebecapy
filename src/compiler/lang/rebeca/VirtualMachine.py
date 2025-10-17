@@ -8,9 +8,10 @@ from compiler.lang.rebeca.Module import Module
 from compiler.lang.rebeca.PreProcessor import PreProcessor
 
 class VirtualMachine:
-	def __init__(self):
+	def __init__(self, interfaces:dict= None):
 		self.parser  = Parser()
 		self.trace   = False
+		self.ifc	 = interfaces
 		return
 
 	@property
@@ -35,7 +36,7 @@ class VirtualMachine:
 	
 
 	def start(self):
-		self.ctxt	= self.module.create()
+		self.ctxt	= self.module.create(self.ifc)
 		return
 
 	def run(self):
@@ -44,11 +45,12 @@ class VirtualMachine:
 			self.ctxt.step()
 		return		
 
-	def step(self):
+	def step(self, numsteps=1):
 		# Step through the context if it is runnable
-		if self.ctxt.runnable:
-			self.ctxt.step()
-			return True
+		for i in range(numsteps):
+			if self.ctxt.runnable:
+				self.ctxt.step()
+				return True
 		
 		return False
 

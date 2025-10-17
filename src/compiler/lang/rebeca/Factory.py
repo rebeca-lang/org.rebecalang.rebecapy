@@ -14,9 +14,14 @@ from compiler.lang.objects.Port import Port
 from abc import ABC, abstractmethod
 
 class Factory:
-	def __init__(self):
+	def __init__(self, interfaces:dict= None):
+		self.set_config(interfaces)
 		return
 
+	def set_config(self, interfaces:dict):
+		self.iport =	interfaces.get('port') if interfaces else None
+		return
+	
 	def create_actor(self, ctxt, rc, name:str, idents:list=None, params:list=None):
 		return Actor(ctxt, rc, name, idents, params)
 		
@@ -34,7 +39,7 @@ class Factory:
 		elif type == 'tree':
 			return Tree()
 		elif type == 'port':
-			return Port()
+			return Port(self.iport)
 		return None
 	
 if __name__ == "__main__":
