@@ -1,0 +1,22 @@
+reactiveclass Car(5) {         
+	statevars { 		
+		port	topic;
+	} 
+	Car() { 
+		topic.open( 'ipc:/Objects/Car/17FED4F1-3037-4475-8F14-A1CA3D90FBD6' );
+		self.sendMsg(); 
+	}   
+
+	~Car() { 
+		topic.close();
+	}   
+
+	msgsrv sendMsg() {    
+		topic.send( 'move' );
+    }		
+} 
+		
+
+main { 
+	Car app():(); 
+} 
