@@ -52,7 +52,9 @@ class Parser:
         data    = self.preprocess(data, path)
         if len(data) == 0:
             return
-        
+
+        self.lexer.setfile( self.filename )
+
         self.parser.parse(data)
         self.__dump()
         return
@@ -866,12 +868,8 @@ class Parser:
         return
 
     def p_error(self, p):
-        context     = p.lexer.filename
-        if context is  None:
-            context = 'line'
-            
-        raise TypeError( f"{context}:{p.lexer.lineno} Unknown text at \'{p.value}\' [{p.type}]")
-
+        loc   = self.location(p)            
+        raise TypeError( f"{loc[0]}:{loc[1]} Unknown text at \'{p.value}\' [{p.type}]" )
 
         
     def resolve(self, p, var):
@@ -909,18 +907,15 @@ class Parser:
         return
 
     def location(self, p):
-        if self.filename is not None:
+        if p.lexer.filename is not None:
             context = p.lexer.filename
         else:
             context = 'line'
         return (context, p.lexer.lineno)
 
     def here(self, p):
-        if self.filename is not None:
-            context = self.filename
-        else:
-            context = 'line'
-        return f'{context}:{p.lexer.lineno}'
+        loc   = self.location(p)
+        return f'{loc[0]}:{loc[1]}'
 
     def throw(self, p, ex):
         raise RuntimeError( f'{self.location(p)} {ex}' )

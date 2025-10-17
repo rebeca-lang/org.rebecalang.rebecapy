@@ -1,0 +1,25 @@
+reactiveclass Queue(5) {       
+	statevars { 
+		list	cont;		
+	} 
+  
+	Queue() { 
+    	cont.add('a');		
+    	cont.add('b');		
+    	cont.add('bad');		
+    	cont.add('c');
+
+		trace( cont.count() );
+
+    	cont.remove('bad');
+
+        for( i=0; i<3; i++){
+			trace( cont.at(i) );
+        }
+
+	}   
+} 
+
+main { 
+	Queue q():(); 
+} 

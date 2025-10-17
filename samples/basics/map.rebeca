@@ -1,0 +1,19 @@
+reactiveclass Map(5) {       
+	statevars { 
+		map	 	tel;		
+	} 
+  
+	Map() { 
+
+		tel.set('jack', 4098);
+		tel.set('sape', 4139);
+		tel.set('guido', 4127);
+		
+		
+		trace( tel.get('jack') );
+	}   
+} 
+
+main { 
+	Map q():(); 
+} 

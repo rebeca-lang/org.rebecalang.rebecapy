@@ -159,6 +159,12 @@ class Lexer:
         self.lexer = lex.lex(module=self, **kwargs)
         return
     
+    def setfile(self, filename):
+        self.lexer.filename    = filename
+        self.lexer.lineno      = 1
+        self.lexer.charpos     = 0
+        return
+    
     # Test it output
     def test(self,data):
         self.lexer.input(data)

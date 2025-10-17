@@ -16,6 +16,8 @@ class List(Container, list):
 		return {
 			'add':		self.add,
 			'remove':	self.remove,
+			'at':		self.at,
+			'setat':	self.setat,
 			'clear':	self.clear,
 			'count':	self.count,
 			'contains':	self.contains,
@@ -38,7 +40,7 @@ class List(Container, list):
 			super().remove(item)
 		return self
 	
-	def clear(self):		
+	def clear(self):
 		return super().clear()
 	
 	def count(self):
@@ -51,7 +53,13 @@ class List(Container, list):
 		if item in self:
 			return super().index(item)
 		return -1
-	
+
+	def at(self, index:int):
+		return super().__getitem__(index)
+
+	def setat(self, index:int, value):
+		return super().__setitem__(index, value)
+
 	def insert(self, index, item):
 		self.check_full(len(self))
 		super().insert(index, item)

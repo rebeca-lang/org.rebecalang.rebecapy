@@ -29,10 +29,10 @@ class Map(Container, dict):
 
 	def set(self, name, value):
 		self.check_full(len(self))
-		return super().__setattr__(name, value)
+		return self.__setitem__(name, value)
 
 	def get(self, name):
-		return super().__getattr__(name, None)
+		return self.__getitem__(name)
 	
 	def has(self, name):
 		return name in self
@@ -48,7 +48,7 @@ class Map(Container, dict):
 	def count(self):
 		return len(self)
 	
-	def tostring(self, sep=', '):
+	def tostring(self, sep=','):
 		return sep.join( [ f'{k}:{v}' for k,v in self.items() ] )
 	
 	def fromstring(self, s:str, sep=',='):	
@@ -64,4 +64,12 @@ class Map(Container, dict):
 
 if __name__ == "__main__":
 	test = Map()
+
+	test.set('jack', 4098)
+	test.set('sape', 4139)
+	test.set('guido', 4127)
+
+
+	print( test.tostring() )
+	print( test.get('jack') )
 

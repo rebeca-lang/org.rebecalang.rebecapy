@@ -1,7 +1,6 @@
 reactiveclass Queue(5) {       
 	statevars { 
-		queue	waiting;		// FEATURE: Use containers - list, map, queue, stack
-		
+		stack	waiting;		
 	} 
   
 	Queue() { 
