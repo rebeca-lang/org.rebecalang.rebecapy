@@ -1,0 +1,22 @@
+reactiveclass StateMachine(5) {       
+	statevars { 
+		fsm	    states;		
+	} 
+  
+	StateMachine() { 
+		states.load('fsm.json');
+
+		trace(states.current());
+		states.transition('to.B');
+		trace(states.current());
+		states.transition('to.C');
+		trace(states.current());
+		states.transition('to.A');
+		trace(states.current());
+
+	}   
+} 
+
+main { 
+	StateMachine FSM():(); 
+} 

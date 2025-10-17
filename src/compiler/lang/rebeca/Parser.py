@@ -337,6 +337,7 @@ class Parser:
         builtinObject : TYPE_STACK
         builtinObject : TYPE_QUEUE
         builtinObject : TYPE_PORT
+        builtinObject : TYPE_FSM
         """
         self.move(p)
         return

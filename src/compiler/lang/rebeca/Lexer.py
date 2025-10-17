@@ -40,6 +40,7 @@ class Lexer:
     'list'          : 'TYPE_LIST',
     'heap'          : 'TYPE_HEAP',
     'tree'          : 'TYPE_TREE',
+    'fsm'           : 'TYPE_FSM',
 
 
     'void'	        : 'TYPE_VOID',

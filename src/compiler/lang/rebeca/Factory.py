@@ -10,6 +10,7 @@ from compiler.lang.objects.Queue import Queue
 from compiler.lang.objects.PriorityQueue import PriorityQueue
 from compiler.lang.objects.Tree import Tree
 from compiler.lang.objects.Port import Port
+from compiler.lang.objects.StateMachine import StateMachine
 
 from abc import ABC, abstractmethod
 
@@ -40,6 +41,8 @@ class Factory:
 			return Tree()
 		elif type == 'port':
 			return Port(self.iport)
+		elif type == 'fsm':
+			return StateMachine()
 		return None
 	
 if __name__ == "__main__":
