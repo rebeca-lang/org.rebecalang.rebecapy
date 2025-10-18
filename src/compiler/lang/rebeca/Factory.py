@@ -7,6 +7,7 @@ from compiler.lang.objects.List import List
 from compiler.lang.objects.Map import Map
 from compiler.lang.objects.Stack import Stack
 from compiler.lang.objects.Queue import Queue
+from compiler.lang.objects.Graph import Graph
 from compiler.lang.objects.PriorityQueue import PriorityQueue
 from compiler.lang.objects.Tree import Tree
 from compiler.lang.objects.Port import Port
@@ -39,6 +40,8 @@ class Factory:
 			return PriorityQueue()
 		elif type == 'tree':
 			return Tree()
+		elif type == 'graph':
+			return Graph()		
 		elif type == 'port':
 			return Port(self.iport)
 		elif type == 'fsm':
