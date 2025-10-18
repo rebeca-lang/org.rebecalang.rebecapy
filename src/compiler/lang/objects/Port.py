@@ -3,7 +3,6 @@
 # Description: Implementation of the Port class
 
 from compiler.lang.program.RuntimeObject import RuntimeObject
-
 from abc import ABC, abstractmethod
 
 class Interface(ABC):
@@ -45,6 +44,7 @@ class Interface(ABC):
 
 class Port(RuntimeObject):
 	def __init__(self, ifc=None):
+		RuntimeObject.__init__(self)
 		self.ifc 	= ifc
 		self.fd 	= None
 		return
