@@ -41,6 +41,9 @@ class RuntimeContext(RuntimeContextBase):
 		return newctxt
 	
 	def create(self, module):
+		for env in module.envs:
+			env.execute(self)
+
 		if module.main:
 			module.main.create(self)
 			

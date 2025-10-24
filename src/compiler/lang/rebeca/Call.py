@@ -32,9 +32,7 @@ class Trace(Statement):
 		return
 
 	def execute(self, ctxt):
-		if isinstance(self.expr, str): 
-			msg = self.expr
-		elif isinstance(self.expr, Statement):
+		if isinstance(self.expr, Statement):
 			msg = self.expr.execute( ctxt )
 		else:
 			expr = Expression(self.expr)

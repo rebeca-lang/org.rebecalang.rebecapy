@@ -40,7 +40,6 @@ class Parser:
         self.parser         = yacc.yacc(module=self, **kwargs)
 
         # Initialize the state variables
-        self.definitions    = {}
         self.module         = Module()
 
         return
@@ -73,7 +72,7 @@ class Parser:
     # GRAMMAR
     def p_model(self, p):
         """
-        model : blocks main
+        model : envs blocks main
         """
         blocks  = p[1]
         if blocks is None:
@@ -81,6 +80,21 @@ class Parser:
             
         return
 
+    def p_envs(self, p):
+        """
+        envs : 
+        envs : envs env
+        """
+        self.fold(p, 2)
+        return
+    
+    def p_env(self, p):
+        """
+        env : ENV DeclAssignment SEMICOLON
+        """
+        self.module.add_env( p[2] )
+        return
+    
     def p_blocks(self, p):
         """
         blocks : null_clause
@@ -502,7 +516,7 @@ class Parser:
         """
         TraceStmt : TRACE LPAREN Exp RPAREN SEMICOLON
         """
-        opcode  = Trace(  p[3] )
+        opcode  = Trace( p[3] )
         p[0]    = opcode.location( self.location(p) )
         return
 

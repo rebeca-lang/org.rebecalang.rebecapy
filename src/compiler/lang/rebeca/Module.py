@@ -6,13 +6,19 @@ from compiler.lang.rebeca.ReactiveClass import ReactiveClass
 from compiler.lang.rebeca.Main import Main
 from compiler.lang.rebeca.RuntimeContext import RuntimeContext as RebecaRuntimeContext
 from compiler.lang.rebeca.Factory import Factory
+from compiler.lang.program.Assignment import Assignment 
 
 class Module:
 	def __init__(self, classes:list=None, main:Main=None):
+		self.envs	    = []
 		self.classes 	= classes if classes else []
 		self.main 		= main if main is not None else Main()
 		return
 
+	def add_env(self, value):
+		self.envs.append((value))
+		return
+	
 	def get(self, name:str):
 		for c in self.classes:
 			if c.name == name:
