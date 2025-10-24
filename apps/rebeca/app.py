@@ -7,7 +7,7 @@ import os
 
 class Rebeca:
 	def __init__(self):
-		self.steps	= 1000
+		self.steps	= 99999999		# A large number of steps by default
 		return
 
 	def run(self, args, appinfo):		

@@ -2,7 +2,6 @@
 # Filename: VirtualMachine.py
 # Description: Implementation of the VirtualMachine class
 
-from matplotlib import lines
 from compiler.lang.rebeca.Parser import Parser
 from compiler.lang.rebeca.Module import Module
 from compiler.lang.rebeca.PreProcessor import PreProcessor
@@ -57,6 +56,9 @@ class VirtualMachine:
 	def stop(self):
 		self.ctxt.destroy()
 		return
+	
+	def runnable(self):
+		return self.ctxt.runnable
 
 if __name__ == "__main__":
 	test = VirtualMachine()
