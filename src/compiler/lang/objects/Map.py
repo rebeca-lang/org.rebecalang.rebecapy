@@ -32,6 +32,8 @@ class Map(Container, dict):
 		return self.__setitem__(name, value)
 
 	def get(self, name):
+		if self.has(name) is False:
+			return None
 		return self.__getitem__(name)
 	
 	def has(self, name):

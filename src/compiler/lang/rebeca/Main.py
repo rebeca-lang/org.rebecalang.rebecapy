@@ -5,17 +5,27 @@
 from compiler.lang.rebeca.SubProgram import SubProgram
 from compiler.lang.rebeca.Instance import Instance
 from compiler.lang.program.Instruction import Instructions
+from compiler.lang.objects.Map import Map
 
 class Main(SubProgram):
 	def __init__(self, instructions:Instructions=None, arglist=None):
 		SubProgram.__init__(self, 'main', instructions, arglist)
 		return
 	
-	def declare(self, inst):
-		self.append( Instance(inst[0], inst[1], inst[2], inst[3]) )
+	def declare(self, inst:Instance):
+		self.append( inst )
 		return
 
-	def create(self, ctxt):
+	def create(self, ctxt, argv:dict=None):
+		if argv is None:
+			argv = {}
+
+		argmap	= Map()
+		argmap.update(argv)
+
+		# Pass the command line arguments
+		ctxt.set('argv', argmap)
+
 		self.run(ctxt)
 		return
 	

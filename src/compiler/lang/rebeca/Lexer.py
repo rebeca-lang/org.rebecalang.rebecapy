@@ -51,6 +51,7 @@ class Lexer:
     'byte'  	    : 'TYPE_BYTE',
     'boolean'	    : 'TYPE_BOOLEAN',
     'short' 	    : 'TYPE_SHORT',
+    'string'        : 'TYPE_STRING',
 
     'true'	    : 'TRUE',
     'false'	    : 'FALSE'

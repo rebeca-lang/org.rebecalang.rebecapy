@@ -18,7 +18,8 @@ class PreProcessor:
 		line	= line.replace('/', os.sep)
 		return line.replace('\"', '').strip()
 
-	def __resolve_abs_path(self, file:str):
+	def __resolve_abs_path(self, file:str):		
+		# Check for absolute path
 		if file.startswith(os.sep):
 			if os.path.isfile(file) == False:
 				raise FileNotFoundError(file)
@@ -28,6 +29,10 @@ class PreProcessor:
 		return None
 
 	def __resolve_rel_path(self, parent:str, file:str):
+		# Check if there are not relative path 
+		if os.path.isfile(file):
+			return file
+		
 		root	= os.path.dirname(parent)
 		while file.startswith('..'):
 			root	= os.path.pardir(root)

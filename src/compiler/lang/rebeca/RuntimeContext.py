@@ -40,12 +40,12 @@ class RuntimeContext(RuntimeContextBase):
 		newctxt.instances	= self.instances.copy()
 		return newctxt
 	
-	def create(self, module):
+	def create(self, module, argv:dict=None):
 		for env in module.envs:
 			env.execute(self)
 
 		if module.main:
-			module.main.create(self)
+			module.main.create(self, argv)
 			
 		# bind all instancees
 		self.bind()

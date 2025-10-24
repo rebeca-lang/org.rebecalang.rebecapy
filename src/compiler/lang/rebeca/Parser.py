@@ -4,6 +4,7 @@
 
 from compiler.lang.rebeca.Lexer import Lexer
 from compiler.lang.rebeca.Module import Module
+from compiler.lang.rebeca.Instance import Instance
 from compiler.lang.rebeca.Call import *
 
 from compiler.lang.program.Call	import Call 
@@ -106,17 +107,28 @@ class Parser:
 
     def p_main(self, p):
         """
-        main : MAIN BLOCKSTART main_body BLOCKEND
+        main : MAIN main_args BLOCKSTART main_body BLOCKEND
         """
 
         # Iterate through the instances and declare it
-        for i in p[3]:
-            typename    = i[0]
-            typename    = i[0]
-            typename    = i[0]
+        for i in p[4]:
             self.module.main.declare(i)
+
+        self.module.main.arglist    = p[2]
         return
 
+    def p_main_args(self, p):
+        """
+        main_args : 
+        main_args : LPAREN TYPE_MAP identifier RPAREN
+        """
+        match len(p):
+            case 1:
+                p[0]    = []
+            case 5:
+                p[0]    = p[3]
+        return
+    
     def p_main_body(self, p):
         """
         main_body : MainStmts
@@ -128,15 +140,35 @@ class Parser:
         """
         MainStmts : 
         MainStmts : MainStmts InstanceDecl
+        MainStmts : MainStmts MainStmt 
         """
         self.fold(p, 2)
+        return
+
+    def p_MainStmt(self, p):
+        """
+        MainStmt : LocalVars SEMICOLON
+        MainStmt : DeclAssignment SEMICOLON
+        MainStmt : ObjectMethodCall SEMICOLON
+        MainStmt : ConditionalStmt
+        MainStmt : LoopStmt
+        MainStmt : TraceStmt
+        """
+        match len(p):
+            case 2:
+                p[0]    = p[1]
+            case 3:
+                p[0]    = p[1]
+            case _:
+                self.throw( p, 'Invalid statement' )
+
         return
 
     def p_InstanceDecl(self, p):
         """
         InstanceDecl : classname identifier LPAREN arglist RPAREN COLON LPAREN arglist RPAREN SEMICOLON
         """
-        p[0]    = (p[1], p[2], p[4], p[8])
+        p[0]    = Instance(p[1], p[2], p[4], p[8])
         return
 
     def p_classname(self, p):
@@ -373,6 +405,7 @@ class Parser:
         Type : TYPE_INT
         Type : TYPE_SHORT
         Type : TYPE_BYTE 
+        Type : TYPE_STRING 
         Type : className
         Type : builtinObject
         Type : Type LBRACKET number RBRACKET
@@ -450,7 +483,7 @@ class Parser:
         if len(p) == 1:
             p[0]    = None
         else:
-            p[0]    = Return( ','.join(p[2]) )
+            p[0]    = Return( p[2] )
         return
 
     def p_Assignment(self, p):

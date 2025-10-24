@@ -35,8 +35,8 @@ class VirtualMachine:
 		return
 	
 
-	def start(self):
-		self.ctxt	= self.module.create(self.ifc)
+	def start(self, argv:dict=None):
+		self.ctxt	= self.module.create(self.ifc, argv)
 		return
 
 	def run(self):

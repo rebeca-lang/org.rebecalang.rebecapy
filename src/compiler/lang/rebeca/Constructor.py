@@ -7,7 +7,7 @@ from compiler.lang.program.Instruction import Instructions
 
 class Constructor(SubProgram):
 	def __init__(self, name, instructions:Instructions=None, arglist=None):
-		SubProgram.__init__(self, name, instructions)
+		SubProgram.__init__(self, name, instructions, arglist)
 		return
 
 		

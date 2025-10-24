@@ -213,6 +213,12 @@ class RuntimeContext:
 				ret.append(a)
 				continue
 
+			# If the argument is a tuple, assume it is a string. 
+			# return the value
+			if isinstance(a, tuple):
+				ret.append(a[1])
+				continue
+
 			# If the argument is an expression, evaluate it
 			if isinstance(a, Expression):
 				ret.append(a.evaluate(self))

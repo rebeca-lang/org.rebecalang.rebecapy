@@ -24,7 +24,10 @@ class Instance(Instruction):
 		if rc is None:
 			raise RuntimeError(f'Reactive class [{self.type}] not found to create instance [{self.name}].')
 
-		rctxt.instances[self.name]	= ctxt.create_actor( rc, self.name, self.idents, self.params )
+		# Dynamic parameter mapping
+		params	= ctxt.map(self.params)
+
+		rctxt.instances[self.name]	= ctxt.create_actor( rc, self.name, self.idents, params )
 		return None
 
 	def __str__(self):

@@ -30,9 +30,9 @@ class Module:
 		self.classes.append(rclass)
 		return rclass
 	
-	def create(self, interfaces:dict= None):
+	def create(self, interfaces:dict=None, argv:dict=None):
 		ctxt	= RebecaRuntimeContext(self, Factory(interfaces))
-		ctxt.create(self)
+		ctxt.create(self, argv)
 		return ctxt
 
 

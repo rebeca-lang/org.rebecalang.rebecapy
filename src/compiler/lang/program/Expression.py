@@ -13,6 +13,8 @@ class Expression:
 		if isinstance(self.expr, (bool, int, float, type(None))):
 			return self.expr
 
+		# If the argument is a tuple, assume it is a string. 
+		# return the value
 		if isinstance(self.expr, tuple):
 			return self.expr[1]
 

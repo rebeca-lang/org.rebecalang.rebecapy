@@ -25,8 +25,8 @@ class Program:
 
 		if args is not None:
 			if len(args) != len(self.arglist):
-				self.throw(f'Argument count mismatch. Expected {len(self.arglist)}, got {len(args)}.')
-
+				raise RuntimeError(f'{self.name}: Argument count mismatch. Expected {len(self.arglist)}, got {len(args)}.')
+ 
 			if isinstance(args, list):
 				args = {self.arglist[i][1]: args[i] for i in range(len(args))}
 
