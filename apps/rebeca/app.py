@@ -52,6 +52,9 @@ class Rebeca:
 			vm.start()
 
 			for i in range(self.steps):
+				if vm.runnable == False:
+					break
+				
 				vm.step()
 
 			vm.stop()

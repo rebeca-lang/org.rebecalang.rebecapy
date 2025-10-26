@@ -11,6 +11,7 @@ class VirtualMachine:
 		self.parser  = Parser()
 		self.trace   = False
 		self.ifc	 = interfaces
+		self.ctxt    = None
 		return
 
 	@property
@@ -47,11 +48,12 @@ class VirtualMachine:
 	def step(self, numsteps=1):
 		# Step through the context if it is runnable
 		for i in range(numsteps):
-			if self.ctxt.runnable:
-				self.ctxt.step()
-				return True
+			if self.ctxt.runnable == False:
+				return False
+			self.ctxt.step()
+
+		return True
 		
-		return False
 
 	def stop(self):
 		self.ctxt.destroy()
@@ -60,6 +62,17 @@ class VirtualMachine:
 	def runnable(self):
 		return self.ctxt.runnable
 
+	def invoke(self, var:str, method:str, args):
+		obj = self.get_instance(var)
+
+		if obj is None:
+				raise Exception(f"Error: Object '{var}' not found.")
+		
+		return obj.push_msg( (self.ctxt.fork(), method, args) )
+
+	def get_instance(self, name:str):
+		return self.ctxt.instances.get(name, None)
+	
 if __name__ == "__main__":
 	test = VirtualMachine()
 

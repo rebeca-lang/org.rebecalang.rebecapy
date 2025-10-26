@@ -14,5 +14,6 @@ reactiveclass Receiver(5) {
 	msgsrv receiveMsg(boolean msgBit) { 
 		messageBit =msgBit; 
 		//from.receive(true); 
+		trace('Receiver::receiveMsg');
 	} 
 } 
