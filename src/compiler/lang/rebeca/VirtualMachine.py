@@ -48,8 +48,6 @@ class VirtualMachine:
 	def step(self, numsteps=1):
 		# Step through the context if it is runnable
 		for i in range(numsteps):
-			if self.ctxt.runnable == False:
-				return False
 			self.ctxt.step()
 
 		return True
@@ -59,8 +57,8 @@ class VirtualMachine:
 		self.ctxt.destroy()
 		return
 	
-	def runnable(self):
-		return self.ctxt.runnable
+	def pending(self):
+		return self.ctxt.pending
 
 	def invoke(self, var:str, method:str, args):
 		obj = self.get_instance(var)

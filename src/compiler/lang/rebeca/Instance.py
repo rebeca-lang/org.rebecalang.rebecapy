@@ -12,7 +12,7 @@ class Instance(Instruction):
 		Instruction.__init__(self)
 		self.type		= type
 		self.name		= name
-		self.idents		= identifiers
+		self.idents		= [i[1] if isinstance(i, tuple) else i for i in identifiers]
 		self.params		= params
 		self.callback	= callback
 		return

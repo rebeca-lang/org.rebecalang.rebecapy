@@ -30,9 +30,8 @@ class StackFrame:
 
 		self.address	 		= address
 		self.return_address 	= return_address
-		self.vars 	= vars if vars is not None else {}
+		self.vars 				= vars if vars is not None else {}
 		self.thisptr			= None
-		assert isinstance( self.vars, dict)
 		return
 
 	def execute(self, runtime, ctxt):
@@ -107,7 +106,7 @@ class RuntimeContext:
 	def test(self):
 		assert isinstance( self.ip.vars, dict)
 
-	def get(self, name):
+	def get(self, name):		
 		ip 		= self.ip
 		if name == 'self':
 			return ip.thisptr
@@ -208,29 +207,13 @@ class RuntimeContext:
 	def map(self, args:list):
 		ret	= []
 		for a in args:
-			# If the argument is a constant, return it as is
-			if isinstance(a, (bool, int, float, type(None))):
-				ret.append(a)
-				continue
-
-			# If the argument is a tuple, assume it is a string. 
-			# return the value
-			if isinstance(a, tuple):
-				ret.append(a[1])
-				continue
-
 			# If the argument is an expression, evaluate it
 			if isinstance(a, Expression):
 				ret.append(a.evaluate(self))
 				continue
 
-			# Otherwise, treat it as a variable name
-			name	= str(a)
-			var 	= self.get( name )
-			if var is None:
-				raise RuntimeError(f'Unresolved reference variable [{a}].')
-			
-			ret.append( var )
+			ret.append( Expression.resolve(a, self) )
+
 		return ret
 
 	def trace(self, msg:str, logging=False):

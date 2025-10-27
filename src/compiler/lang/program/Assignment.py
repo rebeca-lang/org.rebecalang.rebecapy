@@ -5,9 +5,11 @@
 from compiler.lang.program.Statement import Statement
 from compiler.lang.program.Expression import Expression
 
+		
 class Assignment(Statement):
 	def __init__(self, lvalue, rvalue, type=None):
 		Statement.__init__(self)
+		
 		self.lvalue		= lvalue
 		self.rvalue		= Expression(rvalue)
 		self.declare 	= True if type else False

@@ -1,9 +1,9 @@
-reactiveclass Queue(5) {       
+reactiveclass Stack(5) {       
 	statevars { 
 		stack	waiting;		
 	} 
   
-	Queue() { 
+	Stack() { 
 		int i;
 		
         for( i=0; i<12; i++){
@@ -19,5 +19,5 @@ reactiveclass Queue(5) {
 } 
 
 main { 
-	Queue q():(); 
+	Stack q():(); 
 } 

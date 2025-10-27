@@ -14,7 +14,7 @@ class If(Instruction):
 		return
 
 	def execute(self, ctxt):
-		result	= eval(self.condition, None, ctxt.variables)
+		result	= self.condition.evaluate(ctxt)
 		if result:
 			for instr in self.instructions:
 				instr.execute(ctxt)

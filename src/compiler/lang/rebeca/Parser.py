@@ -8,7 +8,7 @@ from compiler.lang.rebeca.Instance import Instance
 from compiler.lang.rebeca.Call import *
 
 from compiler.lang.program.Call	import Call 
-from compiler.lang.program.Expression import Expression 
+from compiler.lang.program.Expression import Expression, BinaryOperation, NotOperation 
 from compiler.lang.program.For import For 
 from compiler.lang.program.Assignment import Assignment 
 from compiler.lang.program.Declaration import Declaration 
@@ -18,9 +18,16 @@ from compiler.lang.program.LoopBlock import LoopBlock
 from compiler.lang.program.Return import Return 
 from compiler.lang.program.While import While 
 
+from enum import Enum
 
  
 import ply.yacc as yacc
+
+class TokenType(Enum):			
+    VARIABLE        = 1
+    CONSTANT        = 2
+    KEYWORD         = 3
+    PRAGMA          = 4
 
 class Parser:
     def __init__(self, automata=None, evaluator=None):
@@ -168,7 +175,7 @@ class Parser:
         """
         InstanceDecl : classname identifier LPAREN arglist RPAREN COLON LPAREN arglist RPAREN SEMICOLON
         """
-        p[0]    = Instance(p[1], p[2], p[4], p[8])
+        p[0]    = Instance(p[1][1], p[2][1], p[4], p[8])
         return
 
     def p_classname(self, p):
@@ -182,7 +189,7 @@ class Parser:
         """
         reactive_class : REACTIVECLASS identifier queue_def BLOCKSTART class_body BLOCKEND
         """
-        rclass  = self.module.reactive_class( p[2], p[3] )
+        rclass  = self.module.reactive_class( p[2][1], p[3] )
         body    = p[5]
         # Add known rebecs and state variables
         for k in body['knownrebecs']:
@@ -204,12 +211,12 @@ class Parser:
             
         # Add servers
         for srv in body['servers']:
-            rclass.msg_server( srv[0], srv[2], srv[1] )
+            rclass.msg_server( srv[0][1], srv[2], self.__vartoarglist(srv[1]) )
 
         # Add local functions
         for func in body['locals']:
-            rclass.local_function( func[0], func[2], func[1] )
-        
+            rclass.local_function( func[0][1], func[2], self.__vartoarglist(func[1]) )
+
         return
 
     def p_class_body(self, p):
@@ -428,10 +435,17 @@ class Parser:
 
     def p_varlist(self, p):
         """
-        varlist : identifier
-        varlist : varlist identifier
+        varlist : varname
+        varlist : varlist varname
         """
         self.fold(p, 2)
+        return
+
+    def p_varname(self, p):
+        """
+        varname : identifier
+        """
+        p[0]    = p[1][1]
         return
 
     def p_queue_def(self, p):
@@ -512,7 +526,7 @@ class Parser:
         """
         SendMessage : rebecExp DOT msgName LPAREN ArgList RPAREN
         """
-        opcode  = SendMessage( f'{p[1]}.{p[3]}', p[5] )
+        opcode  = SendMessage( [p[1],p[3]], p[5] )
         p[0]    = opcode.location( self.location(p) )
 
         return
@@ -521,7 +535,7 @@ class Parser:
         """
         ObjectMethodCall : identifier DOT msgName LPAREN ArgList RPAREN
         """
-        opcode  = Call( f'{p[1]}.{p[3]}', p[5] )
+        opcode  = Call( [p[1],p[3]], p[5] )
         p[0]    = opcode.location( self.location(p) )
 
         return
@@ -558,7 +572,7 @@ class Parser:
         ConditionalStmt : IF LPAREN LogicalExp RPAREN ConditionBlock 
         ConditionalStmt : IF LPAREN LogicalExp RPAREN ConditionBlock ELSE ConditionBlock
         """
-        opcode  = If( p[3], p[5], p[7] if len(p) == 8 else None )
+        opcode  = If( Expression(p[3]), p[5], p[7] if len(p) == 8 else None )
         p[0]    = opcode.location( self.location(p) )
         return
 
@@ -613,7 +627,7 @@ class Parser:
         """
         match len(p):
             case 4:
-                opcode  = Assignment( p[1], p[3] )
+                opcode  = Assignment( p[1][1], p[3] )
                 p[0]    = opcode.location( self.location(p) )
             case 2:
                 p[0]    = p[1]
@@ -629,9 +643,9 @@ class Parser:
         """
         match len(p):
             case 3:
-                p[0]    = Assignment(p[1], f'{p[1]} + 1')
+                p[0]    = Assignment(p[1][1], BinaryOperation(p[1], '+', 1))
             case 5:
-                p[0]    = Assignment(p[1], f'{p[1]} + {p[4]}')
+                p[0]    = Assignment(p[1][1], BinaryOperation(p[1], '+', p[4]))
             case _:
                 self.throw( p, 'Invalid increment expression' )
         return   
@@ -643,9 +657,9 @@ class Parser:
         """
         match len(p):
             case 3:
-                p[0]    = Assignment(p[1], f'{p[1]} - 1')
+                p[0]    = Assignment(p[1][1], BinaryOperation(p[1], '-', 1))
             case 5:
-                p[0]    = Assignment(p[1], f'{p[1]} - {p[4]}')
+                p[0]    = Assignment(p[1][1], BinaryOperation(p[1], '-', p[4]))
             case _:
                 self.throw( p, 'Invalid decrement expression' )
 
@@ -680,7 +694,7 @@ class Parser:
         """
         arrayVar : identifier LBRACKET Exp RBRACKET
         """
-        p[0]    = f'{p[1]}[{p[3]}]'
+        p[0]    = (p[1],p[3])
         return
 
     def p_ArgList(self, p):
@@ -718,6 +732,7 @@ class Parser:
                 p[0]    = p[2]
             case _:
                 self.throw( p, 'Invalid expression' )
+
         return
     
     def p_TerenaryExp(self, p):
@@ -756,7 +771,7 @@ class Parser:
         """
         match len(p):
             case 3: # Unary operator
-                p[0]    = f'not {p[2]}'
+                p[0]    = NotOperation(p[2])
                 return
             
         op  = p[2]
@@ -765,12 +780,14 @@ class Parser:
                 op  = 'and'
             case '||':
                 op  = 'or'
+            case '^':
+                op  = 'xor'
             case '<=' | '>=' | '<' | '>' | '==' | '!=':
                 pass
             case _:
                 self.throw( p, f'Invalid logical operator {op}' )
 
-        p[0]    = f'({p[1]} {op} {p[3]})'
+        p[0]    = BinaryOperation(p[1], op, p[3])
         return
 
     def p_MathExp(self, p):
@@ -783,16 +800,10 @@ class Parser:
         MathExp : MathExpArg OP_AND MathExpArg
         MathExp : MathExpArg OP_OR MathExpArg
         """
-        match len(p):
-            case 3: # Unary operator
-                p[0]    = f'not {p[2]}'
-                return
-            
-        op  = p[2]
 
         match len(p):
             case 3: # Unary operator
-                p[0]    = f'not {p[2]}'
+                p[0]    = NotOperation(p[2])
                 return
             
         op  = p[2]
@@ -806,7 +817,7 @@ class Parser:
             case _:
                 self.throw( p, f'Invalid logical operator {op}' )
 
-        p[0]    = f'({p[1]} {op} {p[3]})'
+        p[0]    = BinaryOperation(p[1], op, p[3])
         return
 
     def p_MathExpArg(self, p):
@@ -883,14 +894,14 @@ class Parser:
         string : STRING
         """
         
-        p[0]    = ('string', p[1])
+        p[0]    = p[1]
         return
 
     def p_identifier(self, p):
         """
         identifier : IDENTIFIER
         """
-        p[0]    = p[1]
+        p[0]    = (TokenType.VARIABLE, p[1])
         return
 
     def p_boolean(self, p):
@@ -988,6 +999,15 @@ class Parser:
 
         print(f"{self.location(p)} \n  at `{' '.join(path)}`\n  expression=`{','.join(vars)}`")
         return
+
+    def __vartoarglist(self, arglist):
+        args = []
+        for var in arglist:
+            if isinstance(var, tuple):
+                args.append((var[0], var[1][1]))
+            else:
+                args.append(var)
+        return args
 
     
 if __name__ == "__main__":

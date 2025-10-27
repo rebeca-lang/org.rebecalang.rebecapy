@@ -74,7 +74,7 @@ class Actor:
 			# Get the instance with the matching name
 			inst	= ctxt.get( var )
 			if inst is None:
-				raise RuntimeError(f'Unresolved reference variable [{var}] mapping rebec [{kc[0]}].')
+				raise RuntimeError(f'Unresolved reference variable [{var}] mapping rebec [{kr[0]}].')
 
 			# Map the state variable to the known rebec instance
 			self.kr[kr[0]] =inst

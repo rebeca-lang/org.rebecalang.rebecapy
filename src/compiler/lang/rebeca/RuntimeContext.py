@@ -15,6 +15,7 @@ class RuntimeContext(RuntimeContextBase):
 		self.instances	= {}		# List of instantiated instances
 		self.bound		= False		# Chek if the instances are initialized
 		self.factory	= factory
+		self.pending	= True
 		return
 
 	@property
@@ -57,13 +58,6 @@ class RuntimeContext(RuntimeContextBase):
 		self.instances.clear()
 		return
 
-	@property
-	def runnable(self):
-		for i in self.instances.values():
-			if i.runnable == False:
-				return False
-		return True
-
 	def bind(self):
 		# Bind known rebecs from the global context. All instances 
 		# must be created first before they can be run. This is 
@@ -78,12 +72,20 @@ class RuntimeContext(RuntimeContextBase):
 		if self.bound == False:
 			self.bind()
 
+		hasrunnable	= False
+
 		# Step all runnable instances
 		for i in self.instances.values():
 			if i.runnable == False:
 				continue
 
 			i.step(self)
+
+			# Are there still runnable instances?
+			if i.msgcount > 0:
+				hasrunnable	= True
+
+		self.pending	= hasrunnable
 		return
 
 	def get(self, name):

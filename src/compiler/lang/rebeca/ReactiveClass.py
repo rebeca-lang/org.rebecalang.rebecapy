@@ -50,7 +50,7 @@ class ReactiveClass:
 			self.state_vars[n] = vtype
 		return self
 	
-	def msg_server(self, name:str, instructions:list=None, arglist:dict=None):
+	def msg_server(self, name:str, instructions:list=None, arglist:list=None):
 		if name in self.servers:
 			raise RuntimeError(f'Message server [{name}] already defined in reactive class [{self.name}].')
 		
@@ -61,7 +61,7 @@ class ReactiveClass:
 		self.servers[name] = tinfo
 		return self
 
-	def __handle_ctor_dtor(self, name:str, instructions:list=None, arglist:dict=None):
+	def __handle_ctor_dtor(self, name:str, instructions:list=None, arglist:list=None):
 		if (name == self.name) or (name == 'initial'):
 			if self.ctor:
 				raise RuntimeError(f'Constructor already defined in reactive class [{self.name}].')

@@ -9,17 +9,26 @@ from compiler.lang.program.Instruction import Instruction
 class Call(Statement):
 	def __init__(self, method, args=None):
 		Statement.__init__(self)
-		self.call	= method
-		parts		= method.split('.')
-		if len(parts) > 1:
-			self.object	= '.'.join(parts[:-1])
-			self.method	= parts[-1]
+
+		if len(method) > 1:
+			self.object	= Call.__joincall(method[:-1])
+			self.method	= method[-1][1]
+			self.call	= f'{self.object}.{self.method}'
 		else:
 			self.object	= None
-			self.method	= method
+			self.method	= method[0][1]
+			self.call	= self.method
+
 		self.args	= [Expression(arg) for arg in args] if args else []
 		return
 
+	def __joincall(parts):
+		call 	= []
+		for p in parts:
+			call.append(p[1] if isinstance(p, tuple) else p)
+		return '.'.join(call)
+	
+	
 	def evaluate(self, ctxt):
 		return self.execute(ctxt)
 	

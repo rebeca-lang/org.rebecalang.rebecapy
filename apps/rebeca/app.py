@@ -30,11 +30,12 @@ class Rebeca:
 					if len(args) == 0:
 						args	= None
 
-					result	= func( args )				
+					func( args )
+					return 0		
 				except Exception as e:
 					print(e)
 					return -1
-				
+					
 		return 0
 		
 	def step(self, args):
@@ -52,7 +53,7 @@ class Rebeca:
 			vm.start()
 
 			for i in range(self.steps):
-				if vm.runnable == False:
+				if vm.pending() == False:
 					break
 				
 				vm.step()
