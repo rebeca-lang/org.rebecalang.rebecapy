@@ -30,7 +30,9 @@ class Lexer:
     'break'         : 'BREAK',
     'continue'      : 'CONTINUE',
     'delay'         : 'DELAY',
+    'after'         : 'AFTER',
     'env'           : 'ENV',
+    'format'        : 'FORMAT',
 
     'trace'         : 'TRACE',
     

@@ -7,18 +7,17 @@ from compiler.lang.program.Expression import Expression
 
 		
 class Assignment(Statement):
-	def __init__(self, lvalue, rvalue, type=None):
+	def __init__(self, lvalue, rvalue, typename=None):
 		Statement.__init__(self)
 		
 		self.lvalue		= lvalue
-		self.rvalue		= Expression(rvalue)
 		self.declare 	= True if type else False
-		self.type		= type
+		self.type		= typename
 
 		if isinstance(rvalue, Statement):
 			self.rvalue		= rvalue
 		else:
-			self.rvalue		= Expression(rvalue)
+			self.rvalue		= rvalue if type(rvalue) is Expression else Expression(rvalue)
 
 		return
 

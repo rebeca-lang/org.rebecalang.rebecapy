@@ -8,15 +8,14 @@ from compiler.lang.rebeca.Instance import Instance
 from compiler.lang.rebeca.Call import *
 
 from compiler.lang.program.Call	import Call 
-from compiler.lang.program.Expression import Expression, BinaryOperation, NotOperation 
 from compiler.lang.program.For import For 
 from compiler.lang.program.Assignment import Assignment 
 from compiler.lang.program.Declaration import Declaration 
 from compiler.lang.program.Do import Do 
 from compiler.lang.program.If import If 
-from compiler.lang.program.LoopBlock import LoopBlock 
 from compiler.lang.program.Return import Return 
 from compiler.lang.program.While import While 
+from compiler.lang.program.Expression import * 
 
 from enum import Enum
 
@@ -723,6 +722,7 @@ class Parser:
         Exp : LogicalExp
         Exp : ChoiceExp
         Exp : ObjectMethodCall
+        Exp : SystemMethodCall
         Exp : LPAREN Exp RPAREN
         """
         match len(p):
@@ -826,6 +826,20 @@ class Parser:
         MathExpArg : Exp
         """
         self.move(p)
+        return
+
+    def p_SystemMethodCall(self, p):
+        """
+        SystemMethodCall : FormatCall
+        """
+        self.move(p)
+        return
+    
+    def p_FormatCall(self, p):
+        """
+        FormatCall : FORMAT LPAREN STRING RPAREN
+        """
+        p[0]    = Format( p[3] )
         return
 
     def p_null_clause(self, p):

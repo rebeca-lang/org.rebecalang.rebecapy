@@ -212,7 +212,7 @@ class RuntimeContext:
 				ret.append(a.evaluate(self))
 				continue
 
-			ret.append( Expression.resolve(a, self) )
+			ret.append( Expression.resolve(self, a) )
 
 		return ret
 

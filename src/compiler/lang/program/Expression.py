@@ -2,6 +2,8 @@
 # Filename: Expression.py
 # Description: Implementation of the Expression class
 
+import re
+
 # Class representing an expression to be evaluated
 class Expression:
 	def __init__(self, expr, debug=False):
@@ -10,12 +12,15 @@ class Expression:
 		return
 
 	def evaluate(self, ctxt):
-		return Expression.resolve(self.expr, ctxt)
+		return Expression.resolve(ctxt, self.expr)
 
 	@staticmethod
-	def resolve(a, ctxt):
+	def resolve(ctxt, a):
 		if isinstance(a, (bool, int, float, str, type(None))):
 			return a
+
+		if isinstance(a, BinaryOperation):
+			return a.evaluate(ctxt)
 
 		# If the argument is a tuple, assume it is a variable. 
 		if isinstance(a, tuple):
@@ -26,9 +31,6 @@ class Expression:
 			
 			return var
 
-		if isinstance(a, BinaryOperation):
-			return a.evaluate(ctxt)
-
 		# Otherwise, treat it as an expression
 		return eval(a, None, ctxt.variables)
 
@@ -36,6 +38,7 @@ class Expression:
 	def __str__(self):
 		return self.expr
 
+	
 class BinaryOperation:
 	def __init__(self, lvalue, op, rvalue):
 		self.lvalue 	= lvalue
@@ -44,8 +47,8 @@ class BinaryOperation:
 		return
 
 	def evaluate(self, ctxt):
-		lvalue = Expression.resolve(self.lvalue, ctxt)
-		rvalue = Expression.resolve(self.rvalue, ctxt)
+		lvalue = Expression.resolve(ctxt, self.lvalue)
+		rvalue = Expression.resolve(ctxt, self.rvalue)
 
 		if self.op == '+':
 			return lvalue + rvalue
