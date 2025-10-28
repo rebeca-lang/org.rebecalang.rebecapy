@@ -33,7 +33,7 @@ class ReactiveClass:
 		self.ctor = Constructor(f'{self.name}.{self.name}', Instructions(instructions), arglist)
 		return self
 
-	def destructor(self, instructions:list=None, arglist=None):
+	def destructor(self, instructions:list=None):
 		if self.dtor:
 			raise RuntimeError(f'Destructor already defined in reactive class [{self.name}].')
 

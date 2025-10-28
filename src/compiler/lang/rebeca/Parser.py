@@ -16,17 +16,10 @@ from compiler.lang.program.If import If
 from compiler.lang.program.Return import Return 
 from compiler.lang.program.While import While 
 from compiler.lang.program.Expression import * 
-
-from enum import Enum
-
+from compiler.lang.program.Token import TokenType
  
 import ply.yacc as yacc
 
-class TokenType(Enum):			
-    VARIABLE        = 1
-    CONSTANT        = 2
-    KEYWORD         = 3
-    PRAGMA          = 4
 
 class Parser:
     def __init__(self, automata=None, evaluator=None):
@@ -201,12 +194,12 @@ class Parser:
         # Add constructor
         ctor    = body.get('ctor', None)
         if ctor is not None:
-            rclass.constructor( ctor[2], ctor[1] )
+            rclass.constructor( ctor[2], self.__vartoarglist(ctor[1]) )
 
         # Add destructor
         dtor    = body.get('dtor', None)
         if dtor is not None:
-            rclass.destructor( dtor[1], dtor[0] )
+            rclass.destructor( self.__vartoarglist(dtor[1]) )
             
         # Add servers
         for srv in body['servers']:

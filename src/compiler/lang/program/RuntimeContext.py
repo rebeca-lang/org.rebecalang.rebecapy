@@ -75,6 +75,7 @@ class RuntimeContext:
 		return rhs
 	
 	def declare(self, name, value=None):
+		assert isinstance( name, str)		
 		if self.ip.vars.get(name) is not None:
 			raise RuntimeError(f'Variable [{name}] already exists in the current scope.')
 
@@ -93,6 +94,7 @@ class RuntimeContext:
 		return
 	
 	def set(self, name, value):
+		assert isinstance( name, str)		
 		ip 		= self.ip
 
 		if ip.thisptr is not None:
@@ -106,7 +108,8 @@ class RuntimeContext:
 	def test(self):
 		assert isinstance( self.ip.vars, dict)
 
-	def get(self, name):		
+	def get(self, name):
+		assert isinstance( name, str)		
 		ip 		= self.ip
 		if name == 'self':
 			return ip.thisptr

@@ -51,9 +51,9 @@ if __name__ == '__main__':
     );
 
     # Load a Rebeca program that uses the port
-    vm.load('port.rebeca')
+    vm.load('ship.rebeca')
 
     # Start the simulation and run for a number of steps
-    vm.start()
+    vm.start( {'ship': 'ship1'} )
     vm.step(numsteps=100)
     vm.stop()
