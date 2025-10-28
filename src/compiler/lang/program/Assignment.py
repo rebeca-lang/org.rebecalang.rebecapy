@@ -11,7 +11,7 @@ class Assignment(Statement):
 		Statement.__init__(self)
 		
 		self.lvalue		= lvalue
-		self.declare 	= True if type else False
+		self.declare 	= True if typename else False
 		self.type		= typename
 
 		if isinstance(rvalue, Statement):
