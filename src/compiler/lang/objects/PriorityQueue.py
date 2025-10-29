@@ -20,7 +20,7 @@ class PriorityQueue(List):
 		}
 	
 	def invoke(self, ctxt, method:str, args):
-		return RuntimeObject.dispatch(self, [Queue.vtble(self),List.vtble(self)], method, args)
+		return RuntimeObject.dispatch(self, [PriorityQueue.vtble(self),List.vtble(self)], method, args)
 
 	def push(self, priority, item):
 		self.check_full(len(self))
@@ -30,7 +30,9 @@ class PriorityQueue(List):
 	def pop(self):	
 		if len(self) == 0:
 			return None
-		return heapq.heappop(self)
+
+		priority, item	= heapq.heappop(self) 
+		return item
 	
 			
 	def tostring(self, sep=', '):

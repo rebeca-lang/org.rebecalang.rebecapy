@@ -7,7 +7,7 @@ from compiler.lang.program.Expression import Expression
 from compiler.lang.program.Instruction import Instruction
 
 class Call(Statement):
-	def __init__(self, method, args=None):
+	def __init__(self, method, args=None, lineno=None, delay=None):
 		Statement.__init__(self)
 
 		if len(method) > 1:
@@ -20,6 +20,7 @@ class Call(Statement):
 			self.call	= self.method
 
 		self.args	= [Expression(arg) for arg in args] if args else []
+		self.delay	= delay
 		return
 
 	def __joincall(parts):
@@ -45,7 +46,7 @@ class Call(Statement):
 			
 	def __call_object(self, ctxt, obj):
 		try:
-			return obj.invoke( ctxt, self.method, ctxt.map(self.args) )
+			return obj.invoke( ctxt, self.method, ctxt.map(self.args), self.delay )
 		except Exception as e:
 			self.throw( str(e) )
 		

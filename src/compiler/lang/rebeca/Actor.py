@@ -6,7 +6,8 @@ from compiler.lang.rebeca.ReactiveClass import ReactiveClass
 from compiler.lang.rebeca.RuntimeContext import RuntimeContext as RebecaRuntimeContext
 from compiler.lang.program.RuntimeContext import RuntimeContext
 
-import queue
+from queue import PriorityQueue
+import datetime
 
 class Actor:
 	def __init__(self, ctxt:RebecaRuntimeContext, rc:ReactiveClass, name:str, idents:list=None, params:list=None):
@@ -19,7 +20,7 @@ class Actor:
 		self.kr			= {}		# Known rebecs mapping
 		self.params		= params	# Constructor parameters
 		self.vars		= {}		# State variables
-		self.mq			= queue.Queue() 	# Message queue
+		self.mq			= PriorityQueue() 	# Message queue
 		
 		self.__build_vars(ctxt, rc)		
 		return
@@ -39,13 +40,29 @@ class Actor:
 	
 
 	def push_msg(self, msg):
-		self.mq.put(msg)
+		startat = datetime.datetime.now()  # Default priority
+		delay	= msg[3]
+		if delay is not None:
+			startat += datetime.timedelta(milliseconds=delay)
+
+		self.mq.put( (startat, msg) )
 		return self
 	
 	def pop_msg(self):
-		if self.mq.empty():
+		if not self.mq:
 			return None
-		return self.mq.get()
+		
+		# Peek at the next message without removing it
+		nextitem = self.mq.queue[0]
+		now		= datetime.datetime.now()
+
+		# Check if the next message is ready to be processed
+		if nextitem[0] > now:
+			return None
+		
+		# Dequeue the next message
+		item	= self.mq.get() 
+		return item[1]
 
 	@property
 	def msgcount(self):
@@ -68,7 +85,6 @@ class Actor:
 		for n, var in enumerate(self.idents):
 
 			# Identify the known rebec with its matching index
-			#TODO: Are the known rebecs ordered?
 			kr		= self.rc.known_rebecs[n]
 
 			# Get the instance with the matching name
@@ -111,15 +127,15 @@ class Actor:
 				break
 
 			# Unpack the message
-			(ctxt, method, args) = msg
+			(ctxt, method, args, delay) = msg
 
 			# Invoke the method
 			self.__invoke( ctxt, method, args )
 
 		return
 	
-	def invoke(self, ctxt:RuntimeContext, method:str, args):
-		return self.push_msg( (ctxt.fork(), method, args) )
+	def invoke(self, ctxt:RuntimeContext, method:str, args, delay=None):
+		return self.push_msg( (ctxt.fork(), method, args, delay) )
 
 	def __invoke(self, ctxt:RuntimeContext, method:str, args):
 		# Push a new stack frame
