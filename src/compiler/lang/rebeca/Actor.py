@@ -11,6 +11,14 @@ import datetime
 
 class Actor:
 	def __init__(self, ctxt:RebecaRuntimeContext, rc:ReactiveClass, name:str, idents:list=None, params:list=None):
+		""" Constructor
+		Arguments
+			ctxt -- Runtime memory context
+			rc -- Reactive class of the actor
+			name -- Instance name
+			idents -- List of known rebecs identifiers
+			params -- List of constructor parameters
+		"""
 		self.name		= name		# Instance name
 		self.rc			= rc		# Class type information
 		self.ready		= False		# Runnable state
@@ -26,6 +34,11 @@ class Actor:
 		return
 
 	def __build_vars(self, ctxt:RebecaRuntimeContext, rc:ReactiveClass):
+		""" Build state variables for the actor
+		Arguments
+			ctxt -- Runtime memory context
+			rc -- Reactive class of the actor
+		"""
 		for k, v in rc.state_vars.items():
 			if v in ['string', 'boolean', 'int', 'float', 'double', 'byte']:
 				self.vars[k] = None
@@ -40,6 +53,10 @@ class Actor:
 	
 
 	def push_msg(self, msg):
+		""" Pushes a message to the actor queue
+		Arguments
+			msg -- Message to be pushed
+		"""
 		startat = datetime.datetime.now()  # Default priority
 		delay	= msg[3]
 		if delay is not None:
@@ -49,6 +66,8 @@ class Actor:
 		return self
 	
 	def pop_msg(self):
+		""" Pops a message from the actor queue
+		"""
 		if not self.mq:
 			return None
 		
@@ -66,18 +85,28 @@ class Actor:
 
 	@property
 	def msgcount(self):
+		""" Returns the number of messages in the queue
+		"""
 		return self.mq.qsize()
 
 	@property
 	def runnable(self):
+		""" Checks if the actor instance is runnable
+		"""
 		return self.ready
 	
 	
 	def stop(self):
+		""" Stops the execution of the actor instance
+		"""
 		self.ready = False
 		return
 
 	def construct(self, ctxt:RebecaRuntimeContext):
+		""" Constructs the actor instance
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		if self.created == True:
 			return self
 		
@@ -103,11 +132,19 @@ class Actor:
 		return self
 	
 	def destroy(self, ctxt):
+		""" Destroys the actor instance
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		if self.rc.dtor:
 			self.rc.dtor.run(self.ctxt)
 		return
 		
 	def step(self, ctxt:RuntimeContext):
+		""" Processes pending messages and runs the actor instance
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		if self.created == False: 	# Support lazy construction
 			# Initialize and bind known rebecs from the global context
 			self.construct(ctxt)
@@ -135,9 +172,22 @@ class Actor:
 		return
 	
 	def invoke(self, ctxt:RuntimeContext, method:str, args, delay=None):
+		""" Queues an asynchronous method invocation on the actor instance
+		Arguments
+			ctxt -- Runtime memory context
+			method -- Method name
+			args -- arguments
+			delay -- Optional delay in milliseconds before processing the message
+		"""
 		return self.push_msg( (ctxt.fork(), method, args, delay) )
 
 	def __invoke(self, ctxt:RuntimeContext, method:str, args):
+		""" Invokes a method on the actor instance
+		Arguments
+			ctxt -- Runtime memory context
+			method -- Method name
+			args -- arguments
+		"""
 		# Push a new stack frame
 		ctxt.push( f'{self.name}.{method}' )
 
@@ -155,6 +205,10 @@ class Actor:
 		return ret
 
 	def __contructor(self, ctxt:RebecaRuntimeContext):
+		""" Constructs the actor instance
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		self.ctxt 		= ctxt.clone()
 
 		# Set the 'self' pointer in the local context

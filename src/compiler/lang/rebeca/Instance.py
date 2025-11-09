@@ -9,6 +9,14 @@ from compiler.lang.program.RuntimeContext import RuntimeContext
 # Subclass representing an instance declaration
 class Instance(Instruction):
 	def __init__(self, type, name, identifiers, params, callback=None):
+		""" Constructor
+		Arguments
+			type -- Type of the instance
+			name -- Name of the instance
+			identifiers -- List of identifiers
+			params -- Parameters list
+			callback -- Callback function after execution
+		"""
 		Instruction.__init__(self)
 		self.type		= type
 		self.name		= name
@@ -18,6 +26,10 @@ class Instance(Instruction):
 		return
 
 	def execute(self, ctxt:RuntimeContext):
+		""" Executes the instance creation
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		# ctxt.trace(f'Creating instance: {self.name} of type {self.type}')
 		rctxt:RebecaRuntimeContext	= ctxt
 		rc							= rctxt.module.get(self.type)
@@ -31,6 +43,8 @@ class Instance(Instruction):
 		return None
 
 	def __str__(self):
+		""" A string notation of the object
+		"""
 		arglist	= Instruction.argstostring(self.params)
 		return f'{self.type} {self.name}({','.join(self.idents)}):({','.join(arglist)})'
 

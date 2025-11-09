@@ -17,17 +17,38 @@ from abc import ABC, abstractmethod
 
 class Factory:
 	def __init__(self, interfaces:dict= None):
+		""" Constructor
+		Arguments
+			interfaces -- Interfaces passed to the factory
+		"""
 		self.set_config(interfaces)
 		return
 
 	def set_config(self, interfaces:dict):
+		""" Sets a configuration for the factory
+		Arguments
+			interfaces -- Interfaces passed to the factory
+		"""
 		self.iport =	interfaces.get('port') if interfaces else None
 		return
 	
 	def create_actor(self, ctxt, rc, name:str, idents:list=None, params:list=None):
+		""" Creates an actor instance
+		Arguments
+			ctxt -- Runtime memory context
+			rc -- Runtime class of the actor
+			name -- Instance name
+			idents -- Identifiers list
+			params -- Parameters list
+		"""
 		return Actor(ctxt, rc, name, idents, params)
 		
 	def create_object(self, ctxt, type:str):			
+		""" Creates an runtime object instance
+		Arguments
+			ctxt -- Runtime memory context
+			type -- #TODO
+		"""
 		if type == 'map':
 			return Map()
 		elif type == 'list':

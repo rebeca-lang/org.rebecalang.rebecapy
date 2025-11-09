@@ -6,10 +6,18 @@ from abc import ABC, abstractmethod
 
 class Statement(ABC):
 	def __init__(self):
+		""" Constructor
+		"""
 		return
 	
 	@abstractmethod
 	def execute(self, runtime, ctxt, frame):
+		""" Execute the statement in the given runtime context.
+		Arguments
+			runtime -- Runtime environment
+			ctxt -- Runtime memory context
+			frame -- Current stack frame
+		"""
 		pass
 
 		

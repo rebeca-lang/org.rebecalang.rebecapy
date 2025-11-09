@@ -9,6 +9,12 @@ from compiler.lang.program.RuntimeContext import RuntimeContext
 # A module for a reusable sequence of instructions that can be invoked with a name and arguments.
 class SubProgram(Program):
 	def __init__(self, name:str, instructions:Instructions=None, arglist=None):
+		""" Constructor
+		Arguments
+			name -- Name of the subprogram
+			instructions -- Sequence of instructions
+			arglist -- List of argument names
+		"""
 		Program.__init__(self, name, instructions, arglist)
 		return
 	

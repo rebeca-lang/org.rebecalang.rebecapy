@@ -11,27 +11,48 @@ import time, re
 
 class SendMessage(Call):
 	def __init__(self, method, args=None):
+		""" Constructor
+		Arguments
+			method -- Method name
+			args -- arguments
+		"""
 		Call. __init__(self, method, args)
 		return
 
 class Delay(Statement):
 	def __init__(self, millsec=None):
+		""" Constructor
+		Arguments
+			millsec -- Delay time in milliseconds
+		"""
 		Statement. __init__(self)
 		self.millsec = millsec
 		return
 
 	def execute(self, ctxt):
+		""" Execute delay
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		if self.millsec is not None:
 				time.sleep(self.millsec / 1000.0)
 		return None
 			
 class Trace(Statement):
 	def __init__(self, expr):
+		""" Constructor
+		Arguments
+			expr -- Expression to evaluate and trace
+		"""
 		Statement. __init__(self)
 		self.expr = expr
 		return
 
 	def execute(self, ctxt):
+		""" Execute trace
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		if isinstance(self.expr, Statement):
 			msg = self.expr.execute( ctxt )
 		else:
@@ -42,14 +63,26 @@ class Trace(Statement):
 
 class Format(Statement):
 	def __init__(self, expr:str):
+		""" Constructor
+		Arguments
+			expr -- Expression to formatted string
+		"""
 		Statement. __init__(self)
 		self.expr = expr
 		return
 
 	def evaluate(self, ctxt):
+		""" Evaluate formatted string
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		return self.execute( ctxt )
 	
 	def execute(self, ctxt):
+		""" Execute evaluation of the formatted string
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		p = re.compile(r'\{(.+?)\}')
 		s = self.expr
 

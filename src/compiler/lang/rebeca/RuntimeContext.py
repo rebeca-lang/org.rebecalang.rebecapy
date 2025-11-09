@@ -6,6 +6,11 @@ from compiler.lang.program.RuntimeContext import RuntimeContext as RuntimeContex
 
 class RuntimeContext(RuntimeContextBase):
 	def __init__(self, module, factory):
+		""" Constructor
+		Arguments
+			module -- #TODO
+			factory -- #TODO
+		"""
 		RuntimeContextBase.__init__(self)
 
 		# Server module
@@ -20,9 +25,13 @@ class RuntimeContext(RuntimeContextBase):
 
 	@property
 	def stacklen(self):
+		""" #TODO
+		"""
 		return len(self.stack)
 
 	def fork(self):
+		""" #TODO
+		"""
 		newctxt 			= self.clone()
 
 		while len(newctxt.stack) != 1:
@@ -31,6 +40,8 @@ class RuntimeContext(RuntimeContextBase):
 		return newctxt
 
 	def clone(self):
+		""" #TODO
+		"""
 		newctxt 			= RuntimeContext(self.module, self.factory)
 
 		# Clone base context
@@ -42,6 +53,11 @@ class RuntimeContext(RuntimeContextBase):
 		return newctxt
 	
 	def create(self, module, argv:dict=None):
+		""" #TODO
+		Arguments
+			module -- #TODO
+			argv -- #TODO
+		"""
 		for env in module.envs:
 			env.execute(self)
 
@@ -53,12 +69,16 @@ class RuntimeContext(RuntimeContextBase):
 		return
 
 	def destroy(self):
+		""" #TODO
+		"""
 		for i in self.instances.values():
 			i.destroy(self)
 		self.instances.clear()
 		return
 
 	def bind(self):
+		""" #TODO
+		"""
 		# Bind known rebecs from the global context. All instances 
 		# must be created first before they can be run. This is 
 		# done only once.
@@ -69,6 +89,8 @@ class RuntimeContext(RuntimeContextBase):
 		return
 	
 	def step(self):
+		""" #TODO
+		"""
 		if self.bound == False:
 			self.bind()
 
@@ -89,6 +111,10 @@ class RuntimeContext(RuntimeContextBase):
 		return
 
 	def get(self, name):
+		""" #TODO
+		Arguments
+			name -- #TODO
+		"""
 		# Check in the current instance first
 		thisptr = self.ip.thisptr
 		if thisptr is not None:
@@ -103,9 +129,20 @@ class RuntimeContext(RuntimeContextBase):
 		return RuntimeContextBase.get(self, name)
 
 	def create_actor(self, rc, name:str, idents:list=None, params:list=None):
+		""" #TODO
+		Arguments
+			rc -- #TODO
+			name -- #TODO
+			idents -- #TODO
+			params -- #TODO
+		"""
 		return self.factory.create_actor( self, rc, name, idents, params )
 
 	def create_object(self, type:str):			
+		""" #TODO
+		Arguments
+			type -- #TODO
+		"""
 		return self.factory.create_object(self, type)
 
 if __name__ == "__main__":

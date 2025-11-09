@@ -12,6 +12,11 @@ from compiler.lang.program.Instruction import Instructions
 
 class ReactiveClass:
 	def __init__(self, name:str, queue_size:int=-1):
+		""" Constructor
+		Arguments
+			name -- Name of the reactive class
+			queue_size -- Size of the message queue
+		"""
 		self.name			= name
 		self.ctor			= None
 		self.dtor 			= None
@@ -27,6 +32,11 @@ class ReactiveClass:
 		return
 
 	def constructor(self, instructions:list=None, arglist=None):
+		""" Defines the constructor for the reactive class
+		Arguments
+			instructions -- Instructions of the constructor
+			arglist -- Argument list of the constructor
+		"""
 		if self.ctor:
 			raise RuntimeError(f'Constructor already defined in reactive class [{self.name}].')
 		
@@ -34,6 +44,10 @@ class ReactiveClass:
 		return self
 
 	def destructor(self, instructions:list=None):
+		""" Defines the destructor for the reactive class
+		Arguments
+			instructions -- Instructions of the destructor
+		"""
 		if self.dtor:
 			raise RuntimeError(f'Destructor already defined in reactive class [{self.name}].')
 
@@ -41,16 +55,32 @@ class ReactiveClass:
 		return self
 
 	def known_rebec(self, names:list, rtype:str):
+		""" Defines known rebecs for the reactive class
+		Arguments
+			names -- Names of the rebecs
+			rtype -- Type of the rebecs
+		"""
 		for n in names:
 			self.known_rebecs.append((n, rtype))
 		return self
 	
 	def state_var(self, names:list, vtype:str):	
+		""" Defines state variables of the reactive class
+		Arguments
+			names -- Name of the variables
+			vtype -- Type of the variables
+		"""
 		for n in names:
 			self.state_vars[n] = vtype
 		return self
 	
 	def msg_server(self, name:str, instructions:list=None, arglist:list=None):
+		""" Defines a message server for the reactive class
+		Arguments
+			name -- Name of the message server
+			instructions -- Instructions of the message server
+			arglist -- Argument list of the message server
+		"""
 		if name in self.servers:
 			raise RuntimeError(f'Message server [{name}] already defined in reactive class [{self.name}].')
 		
@@ -62,6 +92,12 @@ class ReactiveClass:
 		return self
 
 	def __handle_ctor_dtor(self, name:str, instructions:list=None, arglist:list=None):
+		""" Handles constructor and destructor definitions
+		Arguments
+			name -- Name of the constructor
+			instructions -- Instructions of the constructor
+			arglist -- Argument list of the constructor
+		"""
 		if (name == self.name) or (name == 'initial'):
 			if self.ctor:
 				raise RuntimeError(f'Constructor already defined in reactive class [{self.name}].')
@@ -77,6 +113,13 @@ class ReactiveClass:
 		return False
 		
 	def local_function(self, name:str, rtype:str, instructions:list=None, arglist:dict=None):
+		""" Defines a local function for the reactive class
+		Arguments
+			name -- Name of the local function
+			rtype -- Return type of the local function
+			instructions -- Instructions of the constructor
+			arglist -- Argument list of the constructor
+		"""
 		if name in self.locals:
 			raise RuntimeError(f'Local function [{name}] already defined in reactive class [{self.name}].')
 		
@@ -87,9 +130,21 @@ class ReactiveClass:
 	
 	
 	def construct(self, inst, ctxt:RuntimeContext, args:list):
+		""" Invokes a on instance of the reactive class
+		Arguments
+			inst -- Instance to be constructed
+			ctxt -- Runtime memory context
+			args -- arguments
+		"""
 		return inst.construct(ctxt, args)
 
 	def invoke(self, ctxt:RuntimeContext, method:str, args):
+		""" Invokes a method of the reactive class
+		Arguments
+			ctxt -- Runtime memory context
+			method -- Method name
+			args -- arguments
+		"""
 		tinfo	= self.get_method(method)
 		if tinfo is None:
 			raise RuntimeError(f'Method [{method}] not found in message server [{self.name}].')
@@ -102,6 +157,10 @@ class ReactiveClass:
 
 		
 	def get_method(self, name:str):
+		""" Retrieves a method by its name
+		Arguments
+			name -- Name of the method
+		"""
 		server	= self.servers.get(name, None)
 		if server:
 			return server
@@ -113,6 +172,8 @@ class ReactiveClass:
 		return None
 	
 	def __str__(self):
+		""" A string notation of the object
+		"""
 		lines = []
 
 		queueinfo = ''
