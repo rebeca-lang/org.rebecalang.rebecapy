@@ -6,19 +6,35 @@ import os
 
 class PreProcessor:
 	def __init__(self, includes=None):
+		""" Constructor
+		Arguments
+			includes -- List of include directories
+		"""
 		self.includes	= includes if includes is not None else []
 		return
 
 	def process(self, path):
+		""" Process the given file
+		Arguments
+			path -- Path to the file
+		"""
 		self.root		= os.path.dirname(path)	
 		return self.__import_file(path)
 	
 	def __get_file(self, line):
+		""" Extract the file path from an import statement
+		Arguments
+			line -- Import statement line
+		"""
 		line    = line.strip()[6:]
 		line	= line.replace('/', os.sep)
 		return line.replace('\"', '').strip()
 
 	def __resolve_abs_path(self, file:str):		
+		""" Resolve absolute file path
+		Arguments
+			file -- File path to resolve
+		"""
 		# Check for absolute path
 		if file.startswith(os.sep):
 			if os.path.isfile(file) == False:
@@ -29,6 +45,11 @@ class PreProcessor:
 		return None
 
 	def __resolve_rel_path(self, parent:str, file:str):
+		""" Resolve relative file path
+		Arguments
+			parent -- Parent directory
+			file -- File path to resolve
+		"""
 		# Check if there are not relative path 
 		if os.path.isfile(file):
 			return file
@@ -44,6 +65,11 @@ class PreProcessor:
 		return file
 		
 	def __resolve_file(self, parent:str, file:str):
+		""" Resolve file path
+		Arguments
+			parent -- Parent directory
+			file -- File path to resolve
+		"""
 		orig	= file
 		file	= file.replace('/', os.sep)
 
@@ -66,6 +92,10 @@ class PreProcessor:
 		raise FileNotFoundError(orig)
 	
 	def __import_file(self, path):
+		""" Import the given file
+		Arguments
+			path -- Path to the file
+		"""
 		result  = []
 		
 		with open(path) as file:
@@ -91,9 +121,20 @@ class PreProcessor:
 		
 	
 	def process_line(self, pathinfo, line):
+		""" Processes a single line
+		Arguments
+			pathinfo -- Path information tuple (file, line number)
+			line -- Line of code to process
+		"""
 		return line
 
 	def process_import(self, result, pathinfo, line):
+		""" Process an import statement
+		Arguments
+			result -- Resulting lines list to append processed lines
+			pathinfo -- Path information tuple (file, line number)
+			line -- Line of code to process
+		"""
 		path 		= pathinfo[0]
 
 		# Extract the file path and cannonicalize it

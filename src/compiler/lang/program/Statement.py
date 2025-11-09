@@ -7,11 +7,17 @@ from compiler.lang.program.Instruction import Instruction
 # Base class for all statements
 class Statement(Instruction):
 	def __init__(self):
+		""" Constructor
+		"""
 		Instruction.__init__(self)
 		return
 	
 	@staticmethod
 	def default_value(type:str):
+		""" Get the default value for a given type
+		Arguments
+			type -- Type name
+		"""
 		return {
 					'boolean':False,
 					'int':0,

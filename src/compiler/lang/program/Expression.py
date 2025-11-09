@@ -7,15 +7,29 @@ import re
 # Class representing an expression to be evaluated
 class Expression:
 	def __init__(self, expr, debug=False):
+		""" Constructor
+		Arguments
+			expr -- Expression string
+			debug -- Enable debugging
+		"""
 		self.expr 	= expr
 		self.debug	= debug
 		return
 
 	def evaluate(self, ctxt):
+		""" Evaluate the expression.
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		return Expression.resolve(ctxt, self.expr)
 
 	@staticmethod
 	def resolve(ctxt, a):
+		""" Resolve the expression.
+		Arguments
+			ctxt -- Runtime memory context
+			a -- Expression to resolve
+		"""
 		if isinstance(a, (bool, int, float, str, type(None))):
 			return a
 
@@ -36,17 +50,29 @@ class Expression:
 
 	
 	def __str__(self):
+		""" A string notation of the object
+		"""
 		return self.expr
 
 	
 class BinaryOperation:
 	def __init__(self, lvalue, op, rvalue):
+		""" Constructor
+		Arguments
+			lvalue -- Left-hand side value
+			op -- operation code
+			rvalue -- Right-hand side value
+		"""
 		self.lvalue 	= lvalue
 		self.op 		= op
 		self.rvalue 	= rvalue
 		return
 
 	def evaluate(self, ctxt):
+		""" Evaluate the binary operation.
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		lvalue = Expression.resolve(ctxt, self.lvalue)
 		rvalue = Expression.resolve(ctxt, self.rvalue)
 
@@ -82,10 +108,19 @@ class BinaryOperation:
 
 class NotOperation:
 	def __init__(self, op, rvalue):
+		""" Constructor
+		Arguments
+			op -- Operation code
+			rvalue -- Right-hand side value
+		"""
 		self.rvalue 	= rvalue
 		return
 
 	def evaluate(self, ctxt):
+		""" Evaluate the NOT operation.
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		return not Expression.resolve(self.rvalue, ctxt)
 
 if __name__ == "__main__":

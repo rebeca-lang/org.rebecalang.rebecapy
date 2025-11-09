@@ -8,16 +8,29 @@ from compiler.lang.program.Expression import Expression
 # Represents an address in the program (function name and instruction pointer)
 class Address:
 	def __init__(self, fname, ip):
+		""" Constructor
+		Arguments
+			fname -- #TODO
+			ip -- #TODO
+		"""
 		self.fname	= fname		# function name
 		self.ip 	= ip		# instruction pointer
 		return
 	
 	def __str__(self):
+		""" A string notation of the object
+		"""
 		return f"{self.fname}:{self.ip}"
 
 # Represents the runtime context of the program execution	
 class StackFrame:
 	def __init__(self, address:Address, return_address:Address, vars=None):
+		""" Constructor
+		Arguments
+			address -- #TODO
+			return_address -- #TODO
+			vars -- #TODO
+		"""
 		if vars is None:
 			vars = {}
 		elif isinstance( vars, dict ):
@@ -35,6 +48,11 @@ class StackFrame:
 		return
 
 	def execute(self, runtime, ctxt):
+		""" #TODO
+		Arguments
+			runtime -- #TODO
+			ctxt -- Runtime memory context
+		"""
 		instruction	= ctxt.get(self.address.ip)
 		if instruction is None:
 			return False
@@ -43,12 +61,18 @@ class StackFrame:
 		return True
 	
 	def __str__(self):
+		""" A string notation of the object
+		"""
 		return str(self.address)
 
 
 # Main class managing the runtime context, including the call stack and variable scopes
 class RuntimeContext:
 	def __init__(self, parent=None):
+		""" Constructor
+		Arguments
+			parent -- #TODO
+		"""
 		self.stack 			= []
 		self.instruction	= None
 		self.ax				= None		# accumulator
@@ -59,6 +83,10 @@ class RuntimeContext:
 		return
 
 	def copy(self, rhs):
+		""" #TODO
+		Arguments
+			rhs -- #TODO
+		"""
 		# Clone base context
 		rhs.instruction	= self.instruction
 		rhs.ax			= self.ax
@@ -75,6 +103,11 @@ class RuntimeContext:
 		return rhs
 	
 	def declare(self, name, value=None):
+		""" #TODO
+		Arguments
+			name -- #TODO
+			value -- #TODO
+		"""
 		assert isinstance( name, str)		
 		if self.ip.vars.get(name) is not None:
 			raise RuntimeError(f'Variable [{name}] already exists in the current scope.')
@@ -83,6 +116,10 @@ class RuntimeContext:
 		return
 
 	def set_self(self, obj):
+		""" #TODO
+		Arguments
+			obj -- #TODO
+		"""
 		ip				= self.ip
 
 		# Set the 'self' pointer in the local context
@@ -94,6 +131,11 @@ class RuntimeContext:
 		return
 	
 	def set(self, name, value):
+		""" #TODO
+		Arguments
+			name -- #TODO
+			value -- #TODO
+		"""
 		assert isinstance( name, str)		
 		ip 		= self.ip
 
@@ -106,9 +148,15 @@ class RuntimeContext:
 		return
 
 	def test(self):
+		""" #TODO
+		"""
 		assert isinstance( self.ip.vars, dict)
 
 	def get(self, name):
+		""" #TODO
+		Arguments
+			name -- #TODO
+		"""
 		assert isinstance( name, str)		
 		ip 		= self.ip
 		if name == 'self':
@@ -135,6 +183,10 @@ class RuntimeContext:
 		return None
 
 	def step(self, ctxt):
+		""" #TODO
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		# Execute the current instruction
 		current			= self.stack[-1]
 		if current.execute(self, ctxt) == False:
@@ -146,14 +198,20 @@ class RuntimeContext:
 	
 	@property
 	def ip(self):
+		""" #TODO
+		"""
 		return self.stack[-1]
 
 	@property
 	def sp(self):
+		""" #TODO
+		"""
 		return len(self.stack)
 
 	@property
 	def numvars(self):
+		""" #TODO
+		"""
 		count = 0
 		for f in self.stack:
 			count += len(f.vars)
@@ -161,6 +219,8 @@ class RuntimeContext:
 
 	@property
 	def root(self):
+		""" #TODO
+		"""
 		next = self
 		while next.parent is not None:
 			next = next.parent
@@ -169,10 +229,14 @@ class RuntimeContext:
 
 	@property
 	def variables(self):
+		""" #TODO
+		"""
 		return VariableMapper(self)
 
 	@property
 	def callstack(self):
+		""" #TODO
+		"""
 		lines	= []
 		level	= 0
 
@@ -190,13 +254,23 @@ class RuntimeContext:
 
 	@property
 	def thisptr(self):
+		""" #TODO
+		"""
 		return self.ip.thisptr
 	
 	def next(self):
+		""" #TODO
+		"""
 		self.stack[-1].address.ip += 1
 		return
 
 	def push(self, fname, args=None, ip=0):
+		""" #TODO
+		Arguments
+			fname -- #TODO
+			args -- arguments
+			ip -- #TODO
+		"""
 		frame 			= StackFrame(Address(fname, ip), self.stack[-1], args)
 		frame.thisptr	= self.ip.thisptr
 
@@ -204,10 +278,18 @@ class RuntimeContext:
 		return
 
 	def pop(self, ndx=-1):
+		""" #TODO
+		Arguments
+			ndx -- #TODO
+		"""
 		self.stack.pop(ndx)
 		return
 
 	def map(self, args:list):
+		""" #TODO
+		Arguments
+			args -- arguments
+		"""
 		ret	= []
 		for a in args:
 			# If the argument is an expression, evaluate it
@@ -220,12 +302,19 @@ class RuntimeContext:
 		return ret
 
 	def trace(self, msg:str, logging=False):
+		""" #TODO
+		Arguments
+			msg -- #TODO
+			logging -- #TODO
+		"""
 		print(f'{' '*len(self.stack)}: {msg}')
 		if logging:
 			self.root.log.append(msg)
 		return
 
 	def __str__(self):
+		""" A string notation of the object
+		"""
 		lines	= []
 		lines.append(f"{self.ip.address.fname}:{self.ip.address.ip} - Stack depth: {len(self.stack)}, Variables: {self.numvars}{{")
 
@@ -249,16 +338,28 @@ class RuntimeContext:
 # Helper class to map variable names to their values in the current context
 class VariableMapper(Mapping):
 	def __init__(self, ctxt:RuntimeContext):
+		""" Constructor
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		self.ctxt = ctxt
 		return
 
 	def __getitem__(self, key):
+		""" #TODO
+		Arguments
+			key -- #TODO
+		"""
 		return self.ctxt.get(key)
 
 	def __iter__(self):
+		""" #TODO
+		"""
 		return None
 
 	def __len__(self):
+		""" #TODO
+		"""
 		return len(self.ctxt.numvars)
 	
 if __name__ == "__main__":

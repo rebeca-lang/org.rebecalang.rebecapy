@@ -9,9 +9,15 @@ import compiler.lang.program.RuntimeContext as RuntimeContext
 
 class Interpreter:
 	def __init__(self):
+		""" Constructor
+		"""
 		return
 
 	def interpret(self, program):
+		""" Interpret the given program
+		Arguments
+			program -- Program to interpret
+		"""
 		ctxt = RuntimeContext()
 		return program.evaluate(ctxt)
 		

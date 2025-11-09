@@ -4,10 +4,16 @@
 
 class Symbol:
 	def __init__(self, name:str):
+		""" Constructor
+		Arguments
+			name -- Symbol name
+		"""
 		self.name	= name
 		return
 
 	def __str__(self):
+		""" A string notation of the object
+		"""
 		return self.name
 		
 

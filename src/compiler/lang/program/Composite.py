@@ -6,10 +6,16 @@ from compiler.lang.program.Instruction import Instruction
 
 class Composite:
 	def __init__(self):
+		""" Constructor
+		"""
 		Instruction.__init__(self)
 		return
 
 	def evaluate(self, ctxt):
+		""" Evaluate the composite instruction.
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		return None
 
 		

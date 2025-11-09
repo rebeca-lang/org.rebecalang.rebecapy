@@ -7,12 +7,18 @@ from compiler.lang.program.RuntimeObject import RuntimeObject
 
 class List(Container, list):
 	def __init__(self, maxsize=-1):
+		""" Constructor
+		Arguments
+			maxsize -- Maximum size of the container
+		"""
 		list.__init__(self)
 		Container.__init__(self, maxsize)
 		return
 
 	@staticmethod
 	def vtble(self):
+		""" Returns the v-table
+		"""
 		return {
 			'add':		self.add,
 			'remove':	self.remove,
@@ -28,47 +34,96 @@ class List(Container, list):
 		}
 	
 	def invoke(self, ctxt, method:str, args):
+		""" Invokes a method on the list
+		Arguments
+			ctxt -- Runtime memory context
+			method -- Method name
+			args -- arguments
+		"""
 		return RuntimeObject.dispatch(self, [List.vtble(self)], method, args)
 
 	def add(self, item):
+		""" Adds an item to the list
+		Arguments
+			item -- Item to add
+		"""
 		self.check_full(len(self))
 		self.append(item)
 		return self
 	
 	def remove(self, item):	
+		""" Removes an item from the list
+		Arguments
+			item -- Item to remove
+		"""
 		if item in self:
 			super().remove(item)
 		return self
 	
 	def clear(self):
+		""" Clears the list
+		"""
 		return super().clear()
 	
 	def count(self):
+		""" Returns the items in the list
+		"""
 		return len(self)
 	
 	def contains(self, item):
+		""" Checks if an item is in the list
+		Arguments
+			item -- Item to search for
+		"""
 		return item in self
 	
 	def index(self, item):
+		""" Returns the indes of the item in the list
+		Arguments
+			item -- Index of the item in the list
+		"""
 		if item in self:
 			return super().index(item)
 		return -1
 
 	def at(self, index:int):
+		""" Returns an item at an index
+		Arguments
+			index -- Index of the item in the list
+		"""
 		return super().__getitem__(index)
 
-	def setat(self, index:int, value):
-		return super().__setitem__(index, value)
+	def setat(self, index:int, item):
+		""" Sets an item value at an index
+		Arguments
+			index -- Index of the item in the list
+			item -- Item to set
+		"""
+		return super().__setitem__(index, item)
 
 	def insert(self, index, item):
+		""" Inserts an item at an index
+		Arguments
+			index -- Index of the item in the list
+			item -- Item to set
+		"""
 		self.check_full(len(self))
 		super().insert(index, item)
 		return self
 	
 	def tostring(self, sep=', '):
+		""" Returns a string notation of the list
+		Arguments
+			sep -- Separator
+		"""
 		return sep.join( [ str(i) for i in self ] )
 	
 	def fromstring(self, s:str, sep=','):
+		""" Creates the list from the string
+		Arguments
+			s -- String to decode
+			sep -- Separator
+		"""
 		self.clear()
 		for item in s.split(sep):
 			self.append( item.strip() )

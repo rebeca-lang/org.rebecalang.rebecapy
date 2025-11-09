@@ -8,6 +8,13 @@ from compiler.lang.program.Instruction import Instruction
 
 class Call(Statement):
 	def __init__(self, method, args=None, lineno=None, delay=None):
+		""" Constructor
+		Arguments
+			method -- Method name
+			args -- Map of arguments to the method
+			lineno -- Linenumber in the code
+			delay -- Delay for asynchronous call
+		"""
 		Statement.__init__(self)
 
 		if len(method) > 1:
@@ -24,6 +31,10 @@ class Call(Statement):
 		return
 
 	def __joincall(parts):
+		""" Composes the call instruction
+		Arguments
+			parts -- Parts of the call
+		"""
 		call 	= []
 		for p in parts:
 			call.append(p[1] if isinstance(p, tuple) else p)
@@ -31,9 +42,17 @@ class Call(Statement):
 	
 	
 	def evaluate(self, ctxt):
+		""" Executes the statement
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		return self.execute(ctxt)
 	
 	def execute(self, ctxt):
+		""" Executes the statement
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		if self.object is None:
 			return self.__call_subroutine(ctxt)
 		
@@ -45,12 +64,21 @@ class Call(Statement):
 
 			
 	def __call_object(self, ctxt, obj):
+		""" Invokes a method call
+		Arguments
+			ctxt -- Runtime memory context
+			obj -- Reference to the object
+		"""
 		try:
-			return obj.invoke( ctxt, self.method, ctxt.map(self.args), self.delay )
+			return obj.invoke( ctxt, self.method, ctxt.map(self.args) )
 		except Exception as e:
 			self.throw( str(e) )
 		
 	def __call_subroutine(self, ctxt):
+		""" Calls a subroutine
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		func 	= ctxt.get(self.method)
 		if func is None:
 			raise Exception(f"Function '{self.method}' not found.")
@@ -75,6 +103,8 @@ class Call(Statement):
 		return ret
 		
 	def __str__(self):
+		""" A string notation of the object
+		"""
 		arglist	= Instruction.argstostring(self.args)
 		return f'{self.method}({','.join(arglist)})'
 

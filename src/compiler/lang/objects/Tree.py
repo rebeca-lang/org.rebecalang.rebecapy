@@ -25,6 +25,10 @@ class ErrorCode(enum.Enum):			# Win32 Error codes
 
 class Tree(Container):
 	def __init__(self, maxsize=-1):
+		""" Constructor
+		Arguments
+			maxsize -- Maximum size of the container
+		"""
 		Container.__init__(self, maxsize)
 		return
 
@@ -482,6 +486,8 @@ class Tree(Container, list):
 
 	@staticmethod
 	def vtble(self):
+		""" Virtual table of the Tree class
+		"""
 		return {
 			'add':		self.add,
 			'remove':	self.remove,
@@ -493,6 +499,12 @@ class Tree(Container, list):
 		}
 	
 	def invoke(self, ctxt, method:str, args):
+		""" Invokes a method on the tree
+		Arguments
+			ctxt -- Runtime memory context
+			method -- Method name
+			args -- arguments
+		"""
 		return RuntimeObject.dispatch(self, [Tree.vtble(self)], method, args)
 
 	def clear(self):
@@ -663,6 +675,8 @@ class Tree(Container, list):
 		return root
 
 	def __str__(self):
+		""" A string notation of the object
+		"""
 		return '\n'.join(self.dump())
 
 

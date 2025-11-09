@@ -7,10 +7,16 @@ from compiler.lang.program.Instruction import Instruction
 # Subclass representing a no-operation instruction
 class NoOperation(Instruction):
 	def __init__(self):
+		""" Constructor
+		"""
 		Instruction.__init__(self)
 		return
 
 	def evaluate(self, ctxt):
+		""" Evaluate the no-operation instruction.
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		return None
 		
 

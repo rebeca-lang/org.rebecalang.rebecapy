@@ -8,6 +8,12 @@ from compiler.lang.program.Expression import Expression
 		
 class Assignment(Statement):
 	def __init__(self, lvalue, rvalue, typename=None):
+		""" Constructor
+		Arguments
+			lvalue -- Variable to assign to
+			rvalue -- Value expression to assign
+			typename -- Type of the variable
+		"""
 		Statement.__init__(self)
 		
 		self.lvalue		= lvalue
@@ -22,9 +28,17 @@ class Assignment(Statement):
 		return
 
 	def evaluate(self, ctxt):
+		""" Executes the statement
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		return self.execute(ctxt)
 	
 	def execute(self, ctxt):
+		""" Executes the statement
+		Arguments
+			ctxt -- Runtime memory context
+		"""
 		if self.declare:
 			ctxt.set(self.lvalue, None)
 
@@ -35,6 +49,8 @@ class Assignment(Statement):
 		return ctxt.ax
 	
 	def __str__(self):
+		""" A string notation of the object
+		"""
 		return f"{self.lvalue} = {self.rvalue.__str__()};"
 		
 

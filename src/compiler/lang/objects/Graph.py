@@ -7,6 +7,13 @@ import heapq, json
 
 class Edge:
 	def __init__(self, id:str, to, weight:float=1.0, value=None):
+		""" Constructor
+		Arguments
+			id -- #TODO
+			to -- #TODO
+			weight -- #TODO
+			value -- #TODO
+		"""
 		self.id		= id
 		self.to		= to
 		self.weight	= weight
@@ -15,22 +22,39 @@ class Edge:
 	
 class Vertex:
 	def __init__(self, id:str, value=None):
+		""" Constructor
+		Arguments
+			id -- #TODO
+			value -- #TODO
+		"""
 		self.id		= id
 		self.value	= value
 		self.edges	= []
 		return
 	
 	def at(self, to):
+		""" #TODO
+		Arguments
+			to -- #TODO
+		"""
 		for edge in self.edges:
 			if edge.to == to:
 				return edge
 		return None
 	
 	def join(self, edge:Edge):
+		""" #TODO
+		Arguments
+			edge -- #TODO
+		"""
 		self.edges.append(edge)
 		return edge
 	
 	def is_joined(self, to):
+		""" #TODO
+		Arguments
+			to -- #TODO
+		"""
 		if isinstance(to, Vertex):
 			for edge in self.edges:
 				if edge.to == to:
@@ -43,19 +67,31 @@ class Vertex:
 		return False
 	
 	def __eq__(self, rhs):
+		""" #TODO
+		Arguments
+			rhs -- #TODO
+		"""
 		return self.id == rhs.id
 
 	def __ne__(self, rhs):
+		""" #TODO
+		Arguments
+			rhs -- #TODO
+		"""
 		return self.id != rhs.id
 
 class Graph(RuntimeObject):
 	def __init__(self):
+		""" Constructor
+		"""
 		RuntimeObject.__init__(self)
 		self.vertices	= []
 		return
 
 	@staticmethod
 	def vtble(self):
+		""" Returns the v-table
+		"""
 		return {
 			'add': self.add,
 			'remove': self.remove,
@@ -71,24 +107,51 @@ class Graph(RuntimeObject):
 		}
 	
 	def invoke(self, ctxt, method:str, args):
+		""" Invokes a method
+		Arguments
+			ctxt -- Runtime memory context
+			method -- Method name
+			args -- arguments
+		"""
 		return RuntimeObject.dispatch(self, [Graph.vtble(self)], method, args)
 
 	def add(self, id:str, value=None):
+		""" #TODO
+		Arguments
+			id -- #TODO
+			value -- #TODO
+		"""
 		vertex = Vertex(id, value)
 		self.vertices.append(vertex)
 		return vertex
 
 	def remove(self, vertex):
+		""" #TODO
+		Arguments
+			vertex -- #TODO
+		"""
 		self.vertices.remove(vertex)
 		return
 	
 	def find(self, id:str):
+		""" #TODO
+		Arguments
+			id -- #TODO
+		"""
 		for vertex in self.vertices:
 			if vertex.id == id:
 				return vertex
 		return None
 	
 	def join(self, id:str, start:str, end:str, value=None, weight:float=1.0):
+		""" #TODO
+		Arguments
+			id -- #TODO
+			start -- #TODO
+			end -- #TODO
+			value -- #TODO
+			weight -- #TODO
+		"""
 		start	= self.find(start)
 		end		= self.find(end)
 
@@ -103,6 +166,11 @@ class Graph(RuntimeObject):
 		return start.edges.append( Edge(id, end, weight, value) )
 
 	def find_arc(self, start:str, end:str):
+		""" #TODO
+		Arguments
+			start -- #TODO
+			end -- #TODO
+		"""
 		start = self.find(start)
 		if start is None:
 			return None
@@ -114,18 +182,32 @@ class Graph(RuntimeObject):
 		return None
 	
 	def is_joined(self, start:str, end:str):
+		""" #TODO
+		Arguments
+			start -- #TODO
+			end -- #TODO
+		"""
 		return True if self.find_arc(start, end) is not None else False
 	
 	def nvertices(self):
+		""" #TODO
+		"""
 		return len(self.vertices)
 	
 	def nedges(self):
+		""" #TODO
+		"""
 		total = 0
 		for vertex in self.vertices:
 			total += len(vertex.edges)
 		return total
 	
 	def pathto(self, start:str, end:str):
+		""" #TODO
+		Arguments
+			start -- #TODO
+			end -- #TODO
+		"""
 		if isinstance(start, str):
 			start 	= self.find(start)
 
@@ -140,6 +222,12 @@ class Graph(RuntimeObject):
 
 	@staticmethod
 	def __dijkstra(graph, start, dest):
+		""" #TODO
+		Arguments
+			graph -- #TODO
+			start -- #TODO
+			dest -- #TODO
+		"""
 		vertices = graph.vertices
 
 		# initialize known distance on the frontier
@@ -183,6 +271,8 @@ class Graph(RuntimeObject):
 		return path
 
 	def tostring(self):
+		""" #TODO
+		"""
 		result = {}
 		for vertex in self.vertices:
 			result[vertex.id] = {
@@ -192,6 +282,10 @@ class Graph(RuntimeObject):
 		return json.dumps(result, indent=2)
 	
 	def fromstring(self, data:str):
+		""" #TODO
+		Arguments
+			data -- #TODO
+		"""
 		obj 		= json.loads(data)
 		result 		= Graph()
 		
