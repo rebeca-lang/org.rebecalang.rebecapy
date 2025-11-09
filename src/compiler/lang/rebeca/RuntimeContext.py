@@ -8,8 +8,8 @@ class RuntimeContext(RuntimeContextBase):
 	def __init__(self, module, factory):
 		""" Constructor
 		Arguments
-			module -- #TODO
-			factory -- #TODO
+			module -- Rebeca module
+			factory -- Factory for creating actors and objects
 		"""
 		RuntimeContextBase.__init__(self)
 
@@ -25,12 +25,12 @@ class RuntimeContext(RuntimeContextBase):
 
 	@property
 	def stacklen(self):
-		""" #TODO
+		""" Size of the stack
 		"""
 		return len(self.stack)
 
 	def fork(self):
-		""" #TODO
+		""" Forks the current runtime context
 		"""
 		newctxt 			= self.clone()
 
@@ -40,7 +40,7 @@ class RuntimeContext(RuntimeContextBase):
 		return newctxt
 
 	def clone(self):
-		""" #TODO
+		""" Clones the current runtime context
 		"""
 		newctxt 			= RuntimeContext(self.module, self.factory)
 
@@ -53,10 +53,10 @@ class RuntimeContext(RuntimeContextBase):
 		return newctxt
 	
 	def create(self, module, argv:dict=None):
-		""" #TODO
+		""" Creates a runtime context from a module
 		Arguments
-			module -- #TODO
-			argv -- #TODO
+			module -- Rebeca module to create a context from
+			argv -- Arguments for the main rebec
 		"""
 		for env in module.envs:
 			env.execute(self)
@@ -69,7 +69,7 @@ class RuntimeContext(RuntimeContextBase):
 		return
 
 	def destroy(self):
-		""" #TODO
+		""" Destroys the runtime context
 		"""
 		for i in self.instances.values():
 			i.destroy(self)
@@ -77,7 +77,7 @@ class RuntimeContext(RuntimeContextBase):
 		return
 
 	def bind(self):
-		""" #TODO
+		""" Binds the rebec instances in the context
 		"""
 		# Bind known rebecs from the global context. All instances 
 		# must be created first before they can be run. This is 
@@ -89,7 +89,7 @@ class RuntimeContext(RuntimeContextBase):
 		return
 	
 	def step(self):
-		""" #TODO
+		""" Runs a single step of the runtime context
 		"""
 		if self.bound == False:
 			self.bind()
@@ -111,9 +111,9 @@ class RuntimeContext(RuntimeContextBase):
 		return
 
 	def get(self, name):
-		""" #TODO
+		""" Retrieves a variable from the context
 		Arguments
-			name -- #TODO
+			name -- Name of the variable
 		"""
 		# Check in the current instance first
 		thisptr = self.ip.thisptr
@@ -129,19 +129,19 @@ class RuntimeContext(RuntimeContextBase):
 		return RuntimeContextBase.get(self, name)
 
 	def create_actor(self, rc, name:str, idents:list=None, params:list=None):
-		""" #TODO
+		""" Creates a new actor instance
 		Arguments
-			rc -- #TODO
-			name -- #TODO
-			idents -- #TODO
-			params -- #TODO
+			rc -- Runtime context
+			name -- Name of the actor
+			idents -- Identifiers
+			params -- Parameter list
 		"""
 		return self.factory.create_actor( self, rc, name, idents, params )
 
 	def create_object(self, type:str):			
-		""" #TODO
+		""" Creates a runtime object
 		Arguments
-			type -- #TODO
+			type -- Object type
 		"""
 		return self.factory.create_object(self, type)
 
