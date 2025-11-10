@@ -1,18 +1,4 @@
 # Class: compiler.lang.objects.Tree.Tree
-## Method: Tree.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| maxsize | Maximum size of the container |
-
-## Method: Tree.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| maxsize | Number of nodes allowed in the tree |
-
 ## Method: Tree.vtble
 Virtual table of the Tree class
 
@@ -108,22 +94,6 @@ Dumps the tree to an output stream
 | --- | --- |
 | flags=0 | Flag used to control the ouput |
 
-## Method: Tree.__append_node
-Internal callback function to handle dumping a tree node
-
-| Argument | Description |
-| --- | --- |
-| result | Context argument passed to the callback |
-| node | Node to process |
-
-## Method: Tree.__count_node
-Internal callback function to handle dumping a tree node
-
-| Argument | Description |
-| --- | --- |
-| result | Context argument passed to the callback |
-| node | Node to process |
-
 ## Method: Tree.root
 Returns the root node
 
@@ -143,10 +113,4 @@ Attaches a new root node
 | Argument | Description |
 | --- | --- |
 | node | new root node |
-
-## Method: Tree.__str__
-A string notation of the object
-
-| Argument | Description |
-| --- | --- |
 

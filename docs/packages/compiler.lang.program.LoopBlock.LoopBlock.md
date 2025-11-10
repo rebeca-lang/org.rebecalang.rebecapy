@@ -1,11 +1,4 @@
 # Class: compiler.lang.program.LoopBlock.LoopBlock
-## Method: LoopBlock.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| instructions | Instructions to execute within the block |
-
 ## Method: LoopBlock.append
 Append an instruction to the block
 

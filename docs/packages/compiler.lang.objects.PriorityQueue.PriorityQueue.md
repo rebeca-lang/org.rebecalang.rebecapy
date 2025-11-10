@@ -1,11 +1,4 @@
 # Class: compiler.lang.objects.PriorityQueue.PriorityQueue
-## Method: PriorityQueue.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| maxsize | Maximum size of the container |
-
 ## Method: PriorityQueue.vtble
 Returns the v-table
 

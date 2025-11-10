@@ -1,10 +1,4 @@
 # Class: compiler.lang.objects.Graph.Graph
-## Method: Graph.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-
 ## Method: Graph.vtble
 Returns the v-table
 

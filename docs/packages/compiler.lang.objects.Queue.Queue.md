@@ -1,11 +1,4 @@
 # Class: compiler.lang.objects.Queue.Queue
-## Method: Queue.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| maxsize | Maximum size of the container |
-
 ## Method: Queue.vtble
 Returns the v-table
 

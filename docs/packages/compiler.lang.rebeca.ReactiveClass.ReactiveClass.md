@@ -1,12 +1,4 @@
 # Class: compiler.lang.rebeca.ReactiveClass.ReactiveClass
-## Method: ReactiveClass.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| name | Name of the reactive class |
-| queue_size | Size of the message queue |
-
 ## Method: ReactiveClass.constructor
 Defines the constructor for the reactive class
 
@@ -47,15 +39,6 @@ Defines a message server for the reactive class
 | instructions | Instructions of the message server |
 | arglist | Argument list of the message server |
 
-## Method: ReactiveClass.__handle_ctor_dtor
-Handles constructor and destructor definitions
-
-| Argument | Description |
-| --- | --- |
-| name | Name of the constructor |
-| instructions | Instructions of the constructor |
-| arglist | Argument list of the constructor |
-
 ## Method: ReactiveClass.local_function
 Defines a local function for the reactive class
 
@@ -90,10 +73,4 @@ Retrieves a method by its name
 | Argument | Description |
 | --- | --- |
 | name | Name of the method |
-
-## Method: ReactiveClass.__str__
-A string notation of the object
-
-| Argument | Description |
-| --- | --- |
 

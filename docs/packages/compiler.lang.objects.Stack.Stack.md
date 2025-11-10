@@ -1,11 +1,4 @@
 # Class: compiler.lang.objects.Stack.Stack
-## Method: Stack.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| maxsize | Maximum size of the container |
-
 ## Method: Stack.vtble
 Returns the v-table
 

@@ -1,11 +1,4 @@
 # Class: compiler.lang.objects.List.List
-## Method: List.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| maxsize | Maximum size of the container |
-
 ## Method: List.vtble
 Returns the v-table
 

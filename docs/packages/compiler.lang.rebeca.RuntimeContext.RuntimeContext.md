@@ -1,12 +1,4 @@
 # Class: compiler.lang.rebeca.RuntimeContext.RuntimeContext
-## Method: RuntimeContext.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| module | Rebeca module |
-| factory | Factory for creating actors and objects |
-
 ## Method: RuntimeContext.stacklen
 Size of the stack
 

@@ -1,11 +1,4 @@
 # Class: compiler.lang.rebeca.VirtualMachine.VirtualMachine
-## Method: VirtualMachine.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| interfaces | Interface definitions |
-
 ## Method: VirtualMachine.module
 Returns the modue of the parser.
 

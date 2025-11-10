@@ -1,11 +1,4 @@
 # Class: compiler.lang.objects.Port.Port
-## Method: Port.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| ifc | Interface for the socket driver |
-
 ## Method: Port.vtble
 Returns the v-table
 

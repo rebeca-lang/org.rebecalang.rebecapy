@@ -1,10 +1,4 @@
 # Class: compiler.lang.objects.StateMachine.StateMachine
-## Method: StateMachine.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-
 ## Method: StateMachine.vtble
 Virtual table of the StateMachine class
 
@@ -94,12 +88,6 @@ Saves the state machine to a file
 
 ## Method: StateMachine.reset
 Resets the state machine to the default state
-
-| Argument | Description |
-| --- | --- |
-
-## Method: StateMachine.__str__
-A string notation of the object
 
 | Argument | Description |
 | --- | --- |

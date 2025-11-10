@@ -1,11 +1,4 @@
 # Class: compiler.lang.program.RuntimeContext.RuntimeContext
-## Method: RuntimeContext.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| parent | Parent runtime context |
-
 ## Method: RuntimeContext.copy
 Copies the runtime context
 
@@ -134,10 +127,4 @@ Logs a trace message
 | --- | --- |
 | msg | Message to log |
 | logging | Whether to log the message to file (default: False) |
-
-## Method: RuntimeContext.__str__
-A string notation of the object
-
-| Argument | Description |
-| --- | --- |
 

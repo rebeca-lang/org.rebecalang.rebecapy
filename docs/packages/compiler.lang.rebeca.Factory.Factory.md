@@ -1,11 +1,4 @@
 # Class: compiler.lang.rebeca.Factory.Factory
-## Method: Factory.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| interfaces | Interfaces passed to the factory |
-
 ## Method: Factory.set_config
 Sets a configuration for the factory
 

@@ -1,23 +1,4 @@
 # Class: compiler.lang.rebeca.Actor.Actor
-## Method: Actor.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| ctxt | Runtime memory context |
-| rc | Reactive class of the actor |
-| name | Instance name |
-| idents | List of known rebecs identifiers |
-| params | List of constructor parameters |
-
-## Method: Actor.__build_vars
-Build state variables for the actor
-
-| Argument | Description |
-| --- | --- |
-| ctxt | Runtime memory context |
-| rc | Reactive class of the actor |
-
 ## Method: Actor.push_msg
 Pushes a message to the actor queue
 
@@ -79,20 +60,4 @@ Queues an asynchronous method invocation on the actor instance
 | method | Method name |
 | args | arguments |
 | delay | Optional delay in milliseconds before processing the message |
-
-## Method: Actor.__invoke
-Invokes a method on the actor instance
-
-| Argument | Description |
-| --- | --- |
-| ctxt | Runtime memory context |
-| method | Method name |
-| args | arguments |
-
-## Method: Actor.__contructor
-Constructs the actor instance
-
-| Argument | Description |
-| --- | --- |
-| ctxt | Runtime memory context |
 

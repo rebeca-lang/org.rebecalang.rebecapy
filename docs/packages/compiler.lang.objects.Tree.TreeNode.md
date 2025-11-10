@@ -1,13 +1,4 @@
 # Class: compiler.lang.objects.Tree.TreeNode
-## Method: TreeNode.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| name=None | Name of the node |
-| parent=None | Parent node |
-| data=None | Data associated with the node |
-
 ## Method: TreeNode.construct
 Constructs the object
 
@@ -22,13 +13,6 @@ Adds a new child node to the tree
 | Argument | Description |
 | --- | --- |
 | node | Node to add |
-
-## Method: TreeNode.__can_add_node
-Overridable called to check if a node can be added
-
-| Argument | Description |
-| --- | --- |
-| node | Node to validate |
 
 ## Method: TreeNode.remove
 Removes a child node
@@ -57,13 +41,6 @@ Destroys a node (does not remove it from the list)
 | --- | --- |
 | node | Node to destroy |
 
-## Method: TreeNode.__can_destroy
-Overridable function used to control deletion of a tree node
-
-| Argument | Description |
-| --- | --- |
-| node | Node to validate |
-
 ## Method: TreeNode.get
 Gets a node using a path notation. (New nodes are created if none exists).
 
@@ -85,14 +62,6 @@ Searches for the first node with a matching name
 | --- | --- |
 | name | Name of the node |
 | flags=0 | UNUSED |
-
-## Method: TreeNode.__find_match
-Internal callback function to handle search for a node
-
-| Argument | Description |
-| --- | --- |
-| ctxt | Context argument passed to the callback |
-| node | Node to process |
 
 ## Method: TreeNode.traverse
 Helper function to iterate through child nodes of a node and invoke a callback
@@ -127,13 +96,6 @@ Returns a child by index
 | ndx | Index of the child to return |
 
 ## Method: TreeNode.child
-Returns a child node with a matching name
-
-| Argument | Description |
-| --- | --- |
-| name | Name of the node to search for |
-
-## Method: TreeNode.__getitem__
 Returns a child node with a matching name
 
 | Argument | Description |

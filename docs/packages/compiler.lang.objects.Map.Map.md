@@ -1,11 +1,4 @@
 # Class: compiler.lang.objects.Map.Map
-## Method: Map.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| maxsize | Maximum size of the container |
-
 ## Method: Map.vtble
 Returns the v-table
 

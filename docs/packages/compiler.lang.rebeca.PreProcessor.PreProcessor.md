@@ -1,11 +1,4 @@
 # Class: compiler.lang.rebeca.PreProcessor.PreProcessor
-## Method: PreProcessor.__init__
-Constructor
-
-| Argument | Description |
-| --- | --- |
-| includes | List of include paths |
-
 ## Method: PreProcessor.process_import
 #TODO
 
