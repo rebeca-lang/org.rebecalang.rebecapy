@@ -1,5 +1,11 @@
 # Rebeca Python Toolkit
-This is the Rebeca python runtime. All source code should be placed in the `src/` directory.
+This is the Rebeca python runtime. It is an embeddable verion of Rebeca written entirely in Python. The rebeca language and its tools facilitate verification of actor models within a controlled discrete environment definition. To extend the utility of the models RebecaPy introduces the same actors as embeddable versions in complex uncertain environment, for example a simulation running a world model. Here, hundreds of actors, environmental factors, traffic models, regulatory protocols and the likes may be tested in concert to evaluate situations that closely emulate the real world. 
+
+All source code should be placed in the `src/` directory.
+
+## Contributing to RebecaPy
+Note that the package is pre-release and experimental. Your feedback on improvements and bugs would be much appreciated.
+
 
 ## Getting Started
 
