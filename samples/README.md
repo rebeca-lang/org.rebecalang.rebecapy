@@ -1,3 +1,3 @@
 # List of Samples
-- [basics/README.md](Basic samples)
-- [interop/port/README.md](Embedding Rebeca)
+- [Basic samples](basics/README.md)
+- [Embedding Rebeca](interop/port/README.md)
