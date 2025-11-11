@@ -17,3 +17,6 @@ This is the Rebeca python runtime. All source code should be placed in the `src/
 - `src/` - Source code
 - `requirements.txt` - Python dependencies
 - `README.md` - Project documentation
+- `docs` - [docs/packages/classes.md](Class library)
+- `samples` - [samples/README.md](Rebeca samples)
+
