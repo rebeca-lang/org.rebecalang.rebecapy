@@ -14,9 +14,6 @@ At a high level, the Rebeca model sends commands (e.g., `"move"`) to the host, a
 
 If you treat your simulation environment like an “operating system” for a co-simulation, the Rebeca runtime becomes a client of that OS.
 
-> **Diagram (conceptual architecture)**  
-> Add the image to your repo (e.g., `samples/interop/Concept.png`) and reference it like this:
-
 ![Co-Simulation Operating System concept](Concept.png)
 
 ### How to read the diagram
